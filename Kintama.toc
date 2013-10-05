@@ -7,7 +7,7 @@
 ## X-Website: http://tekkub.net/
 
 ## SavedVariables: KintamaDB
-## OptionalDeps: Ace3, LibItemSearch-1.0
+## OptionalDeps: Ace3
 
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -17,8 +17,6 @@ libs\AceEvent-3.0\AceEvent-3.0.xml
 libs\AceHook-3.0\AceHook-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
 libs\AceLocale-3.0\AceLocale-3.0.xml
-
-libs\ItemSearch\ItemSearch.lua
 
 common.lua
 main.lua

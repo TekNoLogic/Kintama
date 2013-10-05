@@ -8,7 +8,6 @@ local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceE
 local AceDB3 = LibStub('AceDB-3.0')
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Kintama')
-local SearchEngine = LibStub('LibItemSearch-1.0')
 
 function Kintama:OnInitialize()
 	self.db = AceDB3:New('KintamaDB', common:DatabaseDefaults(), true)
@@ -244,19 +243,6 @@ function Kintama:ColorSlotBorder(slot_frame, force_color)
 	target:SetVertexColor(color.r, color.g, color.b)
 end
 
-function Kintama:ApplySearchFilter(slot_frame)
-	if self.search_term and #self.search_term > 1 then
-		local link = GetContainerItemLink(slot_frame:GetParent():GetID(), slot_frame:GetID())
-		if SearchEngine:Find(link, self.search_term) then
-			slot_frame.searchOverlay:Hide()
-		else
-			slot_frame.searchOverlay:Show()
-			self:ColorSlotBorder(slot_frame, plain)
-		end
-	else
-		slot_frame.searchOverlay:Hide()
-	end
-end
 
 --[[************************************************************************************************
 -- Event Handlers
@@ -307,7 +293,6 @@ function Kintama:DecorateBagSlots(bag_id)
 		for _, slot_frame in pairs(self.slot_frames) do
 			if slot_frame:IsVisible() then
 				self:ColorSlotBorder(slot_frame)
-				self:ApplySearchFilter(slot_frame)
 			end
 		end
 		return
@@ -322,7 +307,6 @@ function Kintama:DecorateBagSlots(bag_id)
 		local slot_frame = self.slot_frames[('%d:%d'):format(bag_id, slot_id)]
 		if slot_frame:IsVisible() then
 			self:ColorSlotBorder(slot_frame)
-			self:ApplySearchFilter(slot_frame)
 		end
 	end
 end
@@ -356,15 +340,6 @@ function Kintama:UpdateBags(bag_ids)
 	end
 end
 
-function Kintama:UpdateSearchResult(user)
-	if not self.search_user_initiated then
-		return
-	end
-
-	self.search_term = self.frame.searchbox:GetText()
-	self:DecorateBagSlots()
-end
-
 
 --[[************************************************************************************************
 -- Frame delegates
@@ -375,7 +350,6 @@ function Kintama:OnShow(frame)
 	self:UpdateAllBags()
 
 	self.bag_update_bucket = self:RegisterBucketEvent('BAG_UPDATE', .1, 'UpdateBags')
-	self.search_update_bucket = self:RegisterBucketMessage('Kintama_Searchbox_TextChanged', .35, 'UpdateSearchResult')
 
 	self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateAllBags')
 	self:RegisterEvent('UPDATE_INVENTORY_ALERTS', 'UpdateAllBags')
@@ -383,7 +357,6 @@ end
 
 function Kintama:OnHide(frame)
 	self:UnregisterBucket(self.bag_update_bucket)
-	self:UnregisterBucket(self.search_update_bucket)
 
 	self:UnregisterEvent('BAG_UPDATE_COOLDOWN')
 	self:UnregisterEvent('UPDATE_INVENTORY_ALERTS')
@@ -421,16 +394,6 @@ function Kintama:OnFrameCreate(frame)
 
 	frame.slot_counts = frame:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
 	frame.slot_counts:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT', 10, 8)
-end
-
-function Kintama:OnSearchBoxTextChanged(searchbox, userInput)
-	self.search_user_initiated = userInput
-	self:SendMessage('Kintama_Searchbox_TextChanged')
-end
-
-function Kintama:OnSearchBoxCleared(searchbox)
-	self.search_term = nil
-	self:DecorateBagSlots()
 end
 
 function Kintama:MainFrameTitle(bagFrame)

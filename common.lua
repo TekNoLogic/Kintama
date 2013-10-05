@@ -161,27 +161,6 @@ function common.frame:NewMainFrame(name, delegate)
 	title:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -14)
 	frame.title = title
 
-	local searchbox = CreateFrame("EditBox", name.."SearchBox", frame, "SearchBoxTemplate")
-	searchbox:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -20, -14)
-	searchbox:SetWidth(100)
-	searchbox:SetHeight(20)
-	searchbox:SetAutoFocus(false)
-
-	searchbox:SetScript('OnHide', function(self)
-		self.clearButton:Click()
-	end)
-
-	searchbox.clearFunc = function(searchbox)
-		delegate:OnSearchBoxCleared(searchbox)
-	end
-	searchbox:SetScript('OnChar', BagSearch_OnChar)
-	searchbox:SetScript('OnEnterPressed', EditBox_ClearFocus)
-	searchbox:SetScript('OnTextChanged', function(...)
-		delegate:OnSearchBoxTextChanged(...)
-	end)
-
-	frame.searchbox = searchbox
-
 	title:SetFormattedText(delegate:MainFrameTitle(frame))
 
 	table.insert(UISpecialFrames, frame:GetName())
