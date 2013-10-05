@@ -1,15 +1,12 @@
 local _, common = ...
 
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
-local AceDB3 = LibStub('AceDB-3.0')
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Kintama')
 
 local MAX_COLS = 22
 
 function Kintama:OnInitialize()
-	self.db = AceDB3:New('KintamaDB', common:DatabaseDefaults(), true)
-
 	self.column_width = 39
 	self.row_height = 39
 	self.top_border = 8

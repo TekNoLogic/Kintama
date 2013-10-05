@@ -4,17 +4,6 @@ local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "enUS", true, true)
 local L = LibStub("AceLocale-3.0"):GetLocale("Kintama")
 
 
-function common:DatabaseDefaults()
-	return {
-		profile = {
-			colors = {
-				mouseover = {r = 0, g = .7, b = 1, a = 1},
-				profession = {r = 1, g = 0, b = 1, a = 1},
-			},
-		},
-	}
-end
-
 --[[************************************************************************************************
 -- Frame related methods
 **************************************************************************************************]]
