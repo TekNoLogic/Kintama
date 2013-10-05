@@ -12,7 +12,7 @@ function Kintama:OnInitialize()
 
 	self.column_width = 39
 	self.row_height = 39
-	self.top_border = 2
+	self.top_border = -31
 	self.bottom_border = 24
 	self.right_border = 5
 	self.left_border = 8
