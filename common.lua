@@ -11,11 +11,6 @@ function common:DatabaseDefaults()
 				mouseover = {r = 0, g = .7, b = 1, a = 1},
 				profession = {r = 1, g = 0, b = 1, a = 1},
 			},
-			position = {
-				parent = "UIParent",
-				left = 600,
-				top = 450,
-			},
 		},
 	}
 end
@@ -28,24 +23,6 @@ end
 common.frame = {}
 
 -- Helpers
-local function SetPosition(frame, info)
-	frame:ClearAllPoints()
-
-	local parent = info.parent and getglobal(info.parent) or UIParent
-	local left = info.left or 0
-	local top = info.top or 0
-
-	frame:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", left, top)
-end
-
-local function GetPosition(frame)
-	return {
-		top = frame:GetTop(),
-		left = frame:GetLeft(),
-		parent = frame:GetParent():GetName()
-	}
-end
-
 local function CustomizeFrame(frame)
 	frame:SetBackdropColor(0,0,0, 0.65)
 	frame:SetClampedToScreen(true)
@@ -62,8 +39,6 @@ local function CustomizeFontString(fontstring, color, size)
 end
 
 local frameHelpers = {
-	SetPosition = SetPosition,
-	GetPosition = GetPosition,
 	CustomizeFrame = CustomizeFrame,
 }
 
@@ -111,8 +86,6 @@ function common.frame:NewMainFrame(name, delegate)
 
 	frame:SetToplevel(true)
 	frame:EnableMouse(true)
-	frame:SetMovable(true)
-	frame:RegisterForDrag("LeftButton")
 	frame:SetSize(400, 200)
 
 	frame:SetBackdrop({
@@ -134,14 +107,6 @@ function common.frame:NewMainFrame(name, delegate)
 	delegate:OnFrameCreate(frame)
 
 	table.insert(UISpecialFrames, frame:GetName())
-
-	frame:SetScript("OnDragStart", function(...)
-		delegate:OnDragStart(...)
-	end)
-
-	frame:SetScript("OnDragStop", function(...)
-		delegate:OnDragStop(...)
-	end)
 
 
 	-- local bag_button = CreateFrame("CheckButton", nil, frame)

@@ -20,7 +20,7 @@ function Kintama:OnInitialize()
 	self.bag_indexes = {0, 1, 2, 3, 4 }
 
 	self.frame = common.frame:NewMainFrame('KintamaFrame', self)
-	self.frame:SetPosition(self.db.profile.position)
+	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 	self.frame:CustomizeFrame()
 end
 
