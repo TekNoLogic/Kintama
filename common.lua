@@ -14,27 +14,9 @@ function common:DatabaseDefaults()
 			colors = {
 				mouseover = {r = 0, g = .7, b = 1, a = 1},
 				profession = {r = 1, g = 0, b = 1, a = 1},
-				background = {r = 0, g = 0, b = 0, a = .45},
 			},
 			show = {
 				['*'] = true
-			},
-			appearance = {
-				cols = 10,
-				scale = 1,
-				alpha = 1,
-				glow = false,
-				rarity = true,
-				whites = false,
-			grays = false,
-			},
-			behavior = {
-				strata = 2,
-				locked = false,
-				clamped = true,
-				bagbreak = false,
-				valign = 1,
-				bagorder = 1,
 			},
 			position = {
 				parent = "UIParent",
@@ -52,21 +34,11 @@ end
 -- Namespace
 common.frame = {}
 
-local frame_stratas = {
-	"LOW",
-	"MEDIUM",
-	"HIGH",
-	"DIALOG",
-	"FULLSCREEN",
-	"FULLSCREEN_DIALOG",
-	"TOOLTIP",
-}
-
 -- Helpers
-local function SetSize(frame, width, height)
-	frame:SetWidth(width)
-	frame:SetHeight(height)
-end
+-- local function SetSize(frame, width, height)
+-- 	frame:SetWidth(width)
+-- 	frame:SetHeight(height)
+-- end
 
 local function SetPosition(frame, info)
 	frame:ClearAllPoints()
@@ -87,20 +59,13 @@ local function GetPosition(frame)
 end
 
 local function CustomizeFrame(frame, db)
-	frame:SetScale(db.appearance.scale)
-	frame:SetAlpha(db.appearance.alpha)
-
-	local c = db.colors.background
-	frame:SetBackdropColor(c.r, c.g, c.b, c.a)
-
-	frame:SetClampedToScreen(db.behavior.clamped)
-
-	local strata = frame_stratas[db.behavior.strata]
-	frame:SetFrameStrata(strata)
+	frame:SetBackdropColor(0,0,0, 0.65)
+	frame:SetClampedToScreen(true)
+	frame:SetFrameStrata('MEDIUM')
 end
 
 local function CustomizeFontString(fontstring, color, size)
-	fontstring.SetSize = SetSize
+	-- fontstring.SetSize = SetSize
 
 	fontstring:SetShadowOffset(.8, -.8)
 	fontstring:SetShadowColor(0, 0, 0, .5)
@@ -111,7 +76,7 @@ local function CustomizeFontString(fontstring, color, size)
 end
 
 local frameHelpers = {
-	SetSize = SetSize,
+	-- SetSize = SetSize,
 	SetPosition = SetPosition,
 	GetPosition = GetPosition,
 	CustomizeFrame = CustomizeFrame,

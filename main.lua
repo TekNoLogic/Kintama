@@ -9,6 +9,8 @@ local AceDB3 = LibStub('AceDB-3.0')
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Kintama')
 
+local MAX_COLS = 22
+
 function Kintama:OnInitialize()
 	self.db = AceDB3:New('KintamaDB', common:DatabaseDefaults(), true)
 
@@ -134,7 +136,7 @@ function Kintama:SlotOrder()
 	end
 
 	if empty_count > 0 then
-		local max_columns = self.db.profile.appearance.cols
+		local max_columns = MAX_COLS
 		local number_of_empties = math.min(max_columns - math.fmod(count, max_columns), empty_count)
 
 		for i=1, number_of_empties do
@@ -146,7 +148,7 @@ function Kintama:SlotOrder()
 end
 
 function Kintama:OrganizeBagSlots()
-	local max_columns, current_column, current_row, widest_column, just_incremented_row = self.db.profile.appearance.cols, 1, 1, 0, false
+	local max_columns, current_column, current_row, widest_column, just_incremented_row = MAX_COLS, 1, 1, 0, false
 
 	for slot_key, slot_frame in pairs(self.slot_frames) do
 		slot_frame:Hide()
@@ -204,11 +206,11 @@ function Kintama:ColorSlotBorder(slot_frame, force_color)
 
 	local bcolor --leaving hook for bagcolors
 
-	if self.db.profile.appearance.rarity and not force_color and not bcolor then
+	if not force_color and not bcolor then
 		local link = GetContainerItemLink(bag_frame:GetID(), slot_frame:GetID())
 		if link then
-			local rarity = select(3, GetItemInfo(link))
-			if rarity and (rarity > 1 or (rarity == 1 and self.db.profile.appearance.whites) or (rarity == 0 and self.db.profile.appearance.grays)) then
+			local _, _, rarity = GetItemInfo(link)
+			if rarity and rarity > 1 then
 				color = colorCache[rarity]
 				if not color then
 					local r, g, b, hex = GetItemQualityColor(rarity)
@@ -219,27 +221,7 @@ function Kintama:ColorSlotBorder(slot_frame, force_color)
 		end
 	end
 
-	local texture = slot_frame:GetNormalTexture()
-	if self.db.profile.appearance.glow and color ~= plain then
-		texture:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
-		texture:SetBlendMode("ADD")
-		texture:SetAlpha(.8)
-		texture:SetPoint("CENTER", slot_frame, "CENTER", 0, 1)
-
-		slot_frame.border:Hide()
-		slot_frame.glowing = true
-	elseif slot_frame.glowing then
-		texture:SetTexture("Interface\\Buttons\\UI-Quickslot2")
-		texture:SetBlendMode("BLEND")
-		texture:SetPoint("CENTER", slot_frame, "CENTER", 0, 0)
-		texture:SetAlpha(1)
-		texture:SetVertexColor(1, 1, 1)
-
-		slot_frame.border:Show()
-		slot_frame.glowing = false
-	end
-
-	local target = slot_frame.glowing and texture or slot_frame.border
+	local target = slot_frame.border
 	target:SetVertexColor(color.r, color.g, color.b)
 end
 
@@ -365,13 +347,11 @@ function Kintama:OnHide(frame)
 end
 
 function Kintama:OnDragStart(frame)
-	if not self.db.profile.behavior.locked then
-		frame:StartMoving()
-		frame.is_moving = true
+	frame:StartMoving()
+	frame.is_moving = true
 
-		for _, slot_frame in pairs(self.slot_frames) do
-			slot_frame:EnableMouse(false)
-		end
+	for _, slot_frame in pairs(self.slot_frames) do
+		slot_frame:EnableMouse(false)
 	end
 end
 
