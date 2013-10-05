@@ -15,9 +15,6 @@ function common:DatabaseDefaults()
 				mouseover = {r = 0, g = .7, b = 1, a = 1},
 				profession = {r = 1, g = 0, b = 1, a = 1},
 			},
-			show = {
-				['*'] = true
-			},
 			position = {
 				parent = "UIParent",
 				left = 600,
@@ -53,7 +50,7 @@ local function GetPosition(frame)
 	}
 end
 
-local function CustomizeFrame(frame, db)
+local function CustomizeFrame(frame)
 	frame:SetBackdropColor(0,0,0, 0.65)
 	frame:SetClampedToScreen(true)
 	frame:SetFrameStrata('MEDIUM')

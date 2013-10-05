@@ -25,7 +25,7 @@ function Kintama:OnInitialize()
 
 	self.frame = common.frame:NewMainFrame('KintamaFrame', self)
 	self.frame:SetPosition(self.db.profile.position)
-	self.frame:CustomizeFrame(self.db.profile)
+	self.frame:CustomizeFrame()
 end
 
 function Kintama:OnEnable()
@@ -136,8 +136,7 @@ function Kintama:SlotOrder()
 	end
 
 	if empty_count > 0 then
-		local max_columns = MAX_COLS
-		local number_of_empties = math.min(max_columns - math.fmod(count, max_columns), empty_count)
+		local number_of_empties = math.min(MAX_COLS - math.fmod(count, MAX_COLS), empty_count)
 
 		for i=1, number_of_empties do
 			table.insert(slots, empty_slots[i])
@@ -148,7 +147,7 @@ function Kintama:SlotOrder()
 end
 
 function Kintama:OrganizeBagSlots()
-	local max_columns, current_column, current_row, widest_column, just_incremented_row = MAX_COLS, 1, 1, 0, false
+	local current_column, current_row, widest_column, just_incremented_row = 1, 1, 0, false
 
 	for slot_key, slot_frame in pairs(self.slot_frames) do
 		slot_frame:Hide()
@@ -164,7 +163,7 @@ function Kintama:OrganizeBagSlots()
 		widest_column = math.max(widest_column, current_column)
 		current_column = current_column + 1
 
-		if current_column > max_columns and not just_incremented_row then
+		if current_column > MAX_COLS and not just_incremented_row then
 			current_column, current_row, just_incremented_row = 1, current_row + 1, true
 		end
 	end
