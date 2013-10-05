@@ -1,8 +1,5 @@
 local _, common = ...
 
-local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "enUS", true, true)
-local L = LibStub("AceLocale-3.0"):GetLocale("Kintama")
-
 
 --[[************************************************************************************************
 -- Frame related methods

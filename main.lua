@@ -2,8 +2,6 @@ local _, common = ...
 
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 
-local L = LibStub('AceLocale-3.0'):GetLocale('Kintama')
-
 local MAX_COLS = 22
 
 function Kintama:OnInitialize()
@@ -131,7 +129,7 @@ function Kintama:OrganizeBagSlots()
 		free_slot_count = free_slot_count + bag_frame.free_slots
 	end
 
-	self.frame.slot_counts:SetFormattedText(L['%d/%d Slots'], slot_count - free_slot_count, slot_count)
+	self.frame.slot_counts:SetFormattedText('%d/%d Slots', slot_count - free_slot_count, slot_count)
 
 	self.frame:SetHeight(5 * self.row_height + self.bottom_border + self.top_border)
 	self.frame:SetWidth(widest_column * self.column_width + self.left_border + self.right_border)
