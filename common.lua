@@ -68,17 +68,16 @@ local frameHelpers = {
 }
 
 -- exposed API
-function common.frame:MakeBagFrame(bag_id, parent, delegate)
+function common.frame:MakeBagFrame(bag_id, parent)
 	local bag_frame = CreateFrame("Frame", ('%sBag%d'):format(parent:GetName(), bag_id), parent)
 	bag_frame:SetID(bag_id)
 
 	bag_frame.slot_frames = {}
-	bag_frame.delegate = delegate
 
 	return bag_frame
 end
 
-function common.frame:MakeSlotFrame(bag_frame, slot_id, delegate)
+function common.frame:MakeSlotFrame(bag_frame, slot_id)
 	local bag_id = bag_frame:GetID()
 
 	local slot_template = "ContainerFrameItemButtonTemplate"
@@ -90,7 +89,6 @@ function common.frame:MakeSlotFrame(bag_frame, slot_id, delegate)
 	slot_frame:SetID(slot_id)
 	slot_frame:SetFrameLevel(bag_frame:GetParent():GetFrameLevel()+10)
 
-	slot_frame.delegate = delegate
 	slot_frame:SetFrameStrata(bag_frame:GetParent():GetFrameStrata())
 
 	bag_frame.slot_frames[slot_id] = slot_frame
@@ -105,37 +103,7 @@ function common.frame:MakeMoneyFrame(frame_name, parent, type)
 end
 
 function common.frame:NewMainFrame(name, delegate)
-	local frame = common.frame:NewFrame(name, UIParent, delegate)
-
-	table.insert(UISpecialFrames, frame:GetName())
-
-	frame:SetScript("OnDragStart", function(...)
-		delegate:OnDragStart(...)
-	end)
-
-	frame:SetScript("OnDragStop", function(...)
-		delegate:OnDragStop(...)
-	end)
-
-
-	-- local bag_button = CreateFrame("CheckButton", nil, frame)
-	-- bag_button:SetNormalTexture([[Interface/Buttons/Button-Backpack-Up]])
-
-	-- bag_button:SetHeight(18)
-	-- bag_button:SetWidth(18)
-	-- bag_button:ClearAllPoints()
-
-	-- bag_button:SetPoint("BOTTOM", frame, "BOTTOM", 0, 5)
-
---    frame:CreateTexture(nil, )
-
-	return frame
-end
-
-function common.frame:NewFrame(name, parent, delegate)
-	local frame = CreateFrame("Frame", name, parent)
-
-	frame.delegate = delegate
+	local frame = CreateFrame("Frame", name, UIParent)
 
 	for k, v in pairs(frameHelpers) do
 		frame[k] = v
@@ -164,6 +132,28 @@ function common.frame:NewFrame(name, parent, delegate)
 	end)
 
 	delegate:OnFrameCreate(frame)
+
+	table.insert(UISpecialFrames, frame:GetName())
+
+	frame:SetScript("OnDragStart", function(...)
+		delegate:OnDragStart(...)
+	end)
+
+	frame:SetScript("OnDragStop", function(...)
+		delegate:OnDragStop(...)
+	end)
+
+
+	-- local bag_button = CreateFrame("CheckButton", nil, frame)
+	-- bag_button:SetNormalTexture([[Interface/Buttons/Button-Backpack-Up]])
+
+	-- bag_button:SetHeight(18)
+	-- bag_button:SetWidth(18)
+	-- bag_button:ClearAllPoints()
+
+	-- bag_button:SetPoint("BOTTOM", frame, "BOTTOM", 0, 5)
+
+--    frame:CreateTexture(nil, )
 
 	return frame
 end

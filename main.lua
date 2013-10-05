@@ -72,7 +72,7 @@ local function prepare_bag_slots(self, bag_id)
 	for slot_id = 1, bag_size do
 		local slot_key = ('%s:%s'):format(bag_id, slot_id)
 		if not self.slot_frames[slot_key] then
-			self.slot_frames[slot_key] = common.frame:MakeSlotFrame(self.bag_frames[bag_id], slot_id, self)
+			self.slot_frames[slot_key] = common.frame:MakeSlotFrame(self.bag_frames[bag_id], slot_id)
 		end
 	end
 end
@@ -82,7 +82,7 @@ function Kintama:PrepareBagSlots(bag_id)
 		local bag_frames = {}
 
 		for _, bag_id in pairs(self.bag_indexes) do
-			bag_frames[bag_id] = common.frame:MakeBagFrame(bag_id, self.frame, self)
+			bag_frames[bag_id] = common.frame:MakeBagFrame(bag_id, self.frame)
 		end
 
 		self.bag_frames = bag_frames
