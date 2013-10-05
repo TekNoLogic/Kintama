@@ -17,8 +17,6 @@ function Kintama:OnInitialize()
 	self.right_border = 5
 	self.left_border = 8
 
-	self.bag_indexes = {0, 1, 2, 3, 4 }
-
 	self.frame = common.frame:NewMainFrame('KintamaFrame', self)
 	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 	self.frame:CustomizeFrame()
@@ -90,7 +88,7 @@ function Kintama:PrepareBagSlots(bag_id)
 	if not self.bag_frames then
 		local bag_frames = {}
 
-		for _, bag_id in pairs(self.bag_indexes) do
+		for bag_id=0,4 do
 			bag_frames[bag_id] = common.frame:MakeBagFrame(bag_id, self.frame)
 		end
 
@@ -104,7 +102,7 @@ function Kintama:PrepareBagSlots(bag_id)
 	if bag_id then
 		prepare_bag_slots(self, bag_id)
 	else
-		for _, bag_id in pairs(self.bag_indexes) do
+		for bag_id=0,4 do
 			prepare_bag_slots(self, bag_id)
 		end
 	end
