@@ -4,6 +4,7 @@ local _G = getfenv(0)
 local CreateFrame, LibStub, UIParent = _G.CreateFrame, _G.LibStub, _G.UIParent
 local getglobal, pairs = _G.getglobal, _G.pairs
 
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "enUS", true, true)
 local L = LibStub("AceLocale-3.0"):GetLocale("Kintama")
 
 

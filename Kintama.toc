@@ -20,6 +20,5 @@ libs\AceLocale-3.0\AceLocale-3.0.xml
 
 libs\ItemSearch\ItemSearch.lua
 
-localizations.lua
 common.lua
 main.lua
