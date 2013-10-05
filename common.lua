@@ -157,12 +157,6 @@ end
 function common.frame:NewMainFrame(name, delegate)
 	local frame = common.frame:NewFrame(name, UIParent, delegate)
 
-	local title = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalLargeLeft")
-	title:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -14)
-	frame.title = title
-
-	title:SetFormattedText(delegate:MainFrameTitle(frame))
-
 	table.insert(UISpecialFrames, frame:GetName())
 
 	frame:SetScript("OnDragStart", function(...)

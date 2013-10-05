@@ -395,7 +395,3 @@ function Kintama:OnFrameCreate(frame)
 	frame.slot_counts = frame:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
 	frame.slot_counts:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT', 10, 8)
 end
-
-function Kintama:MainFrameTitle(bagFrame)
-	return L["%s's Bags"], UnitName('player')
-end
