@@ -12,7 +12,7 @@ function Kintama:OnInitialize()
 
 	self.column_width = 39
 	self.row_height = 39
-	self.top_border = -31
+	self.top_border = 8
 	self.bottom_border = 24
 	self.right_border = 5
 	self.left_border = 8
@@ -62,6 +62,15 @@ end
 --[[************************************************************************************************
 -- Bag methods
 **************************************************************************************************]]
+local function GetSlotFrame(bag, slot)
+	local slot_key = ('%s:%s'):format(bag, slot)
+	if not Kintama.slot_frames[slot_key] then
+		Kintama.slot_frames[slot_key] = common.frame:MakeSlotFrame(Kintama.bag_frames[bag], slot)
+	end
+
+	return Kintama.slot_frames[slot_key]
+end
+
 local function prepare_bag_slots(self, bag_id)
 	local bag_size = GetContainerNumSlots(bag_id)
 	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
@@ -101,68 +110,24 @@ function Kintama:PrepareBagSlots(bag_id)
 	end
 end
 
-function Kintama:SlotOrder()
-	local keys, keys_to_slots, slots, empty_slots = {}, {}, {}, {}
-	local count, empty_count = 0, 0
-
-	for slot_key, slot_frame in pairs(self.slot_frames) do
-		local item_link = GetContainerItemLink(slot_frame:GetParent():GetID(), slot_frame:GetID())
-
-		if item_link then
-			local name, link, quality, ilevel, required_level, class, subclass, max_stack, equipment_slot, texture, vendor_price = GetItemInfo(item_link)
-			local key = ('%s%s%d%d%s%s'):format(class, equipment_slot or subclass, quality, 500-(ilevel or 0), name, slot_key)
-
-			table.insert(keys, key)
-			keys_to_slots[key] = self.slot_frames[slot_key]
-
-			count = count + 1
-		else
-			empty_count = empty_count + 1
-			empty_slots[empty_count] = slot_frame
-		end
-	end
-
-	table.sort(keys)
-
-	for _, key in pairs(keys) do
-		table.insert(slots, keys_to_slots[key])
-	end
-
-	if empty_count > 0 then
-		local number_of_empties = math.min(MAX_COLS - math.fmod(count, MAX_COLS), empty_count)
-
-		for i=1, number_of_empties do
-			table.insert(slots, empty_slots[i])
-		end
-	end
-
-	return slots
-end
-
 function Kintama:OrganizeBagSlots()
-	local current_column, current_row, widest_column, just_incremented_row = 1, 1, 0, false
+	local widest_column = 0
 
 	for slot_key, slot_frame in pairs(self.slot_frames) do
 		slot_frame:Hide()
 	end
 
-	for _, slot_frame in pairs(self:SlotOrder()) do
-		just_incremented_row = false
-		slot_frame:ClearAllPoints()
-		slot_frame:SetPoint('TOPLEFT', self.frame:GetName(), 'TOPLEFT', self.left_border + self.column_width * (current_column - 1), 0 - self.top_border - (self.row_height * current_row))
-		slot_frame:SetFrameLevel(self.frame:GetFrameLevel()+20)
-		slot_frame:Show()
+	for bag=0,4 do
+		local slots = GetContainerNumSlots(bag)
+		widest_column = math.max(widest_column, slots)
 
-		widest_column = math.max(widest_column, current_column)
-		current_column = current_column + 1
-
-		if current_column > MAX_COLS and not just_incremented_row then
-			current_column, current_row, just_incremented_row = 1, current_row + 1, true
+		for slot=1,slots do
+			local slot_frame = GetSlotFrame(bag, slot)
+			slot_frame:ClearAllPoints()
+			slot_frame:SetPoint('TOPLEFT', self.frame:GetName(), 'TOPLEFT', self.left_border + self.column_width * (slot - 1), 0 - self.top_border - (self.row_height * bag))
+			slot_frame:SetFrameLevel(self.frame:GetFrameLevel()+20)
+			slot_frame:Show()
 		end
-	end
-
-	if not just_incremented_row then
-		current_row = current_row + 1
 	end
 
 	local slot_count, free_slot_count = 0, 0
@@ -173,7 +138,7 @@ function Kintama:OrganizeBagSlots()
 
 	self.frame.slot_counts:SetFormattedText(L['%d/%d Slots'], slot_count - free_slot_count, slot_count)
 
-	self.frame:SetHeight(current_row * self.row_height + self.bottom_border + self.top_border)
+	self.frame:SetHeight(5 * self.row_height + self.bottom_border + self.top_border)
 	self.frame:SetWidth(widest_column * self.column_width + self.left_border + self.right_border)
 end
 
