@@ -35,11 +35,6 @@ end
 common.frame = {}
 
 -- Helpers
--- local function SetSize(frame, width, height)
--- 	frame:SetWidth(width)
--- 	frame:SetHeight(height)
--- end
-
 local function SetPosition(frame, info)
 	frame:ClearAllPoints()
 
@@ -65,8 +60,6 @@ local function CustomizeFrame(frame, db)
 end
 
 local function CustomizeFontString(fontstring, color, size)
-	-- fontstring.SetSize = SetSize
-
 	fontstring:SetShadowOffset(.8, -.8)
 	fontstring:SetShadowColor(0, 0, 0, .5)
 	fontstring:SetTextColor(color.r, color.g, color.b)
@@ -76,7 +69,6 @@ local function CustomizeFontString(fontstring, color, size)
 end
 
 local frameHelpers = {
-	-- SetSize = SetSize,
 	SetPosition = SetPosition,
 	GetPosition = GetPosition,
 	CustomizeFrame = CustomizeFrame,
