@@ -1,9 +1,5 @@
 local _, common = ...
 
-local _G = getfenv(0)
-local LibStub = _G.LibStub
-local select, pairs, table = _G.select, _G.pairs, _G.table
-
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 local AceDB3 = LibStub('AceDB-3.0')
 
@@ -66,9 +62,6 @@ end
 --[[************************************************************************************************
 -- Bag methods
 **************************************************************************************************]]
-local GetContainerNumSlots, GetContainerNumFreeSlots, GetContainerItemLink, GetItemInfo = _G.GetContainerNumSlots, _G.GetContainerNumFreeSlots, _G.GetContainerItemLink, _G.GetItemInfo
-local math = _G.math
-
 local function prepare_bag_slots(self, bag_id)
 	local bag_size = GetContainerNumSlots(bag_id)
 	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
@@ -228,8 +221,6 @@ end
 --[[************************************************************************************************
 -- Event Handlers
 **************************************************************************************************]]
-local type, ContainerFrame_Update = _G.type, _G.ContainerFrame_Update
-
 function Kintama:IsBagOpen(bag_id)
 	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
 		return
@@ -325,8 +316,6 @@ end
 --[[************************************************************************************************
 -- Frame delegates
 **************************************************************************************************]]
-local UnitName = _G.UnitName
-
 function Kintama:OnShow(frame)
 	self:UpdateAllBags()
 
