@@ -4,14 +4,14 @@ local _G = getfenv(0)
 local LibStub = _G.LibStub
 local select, pairs, table = _G.select, _G.pairs, _G.table
 
-local OneBag4 = LibStub('AceAddon-3.0'):NewAddon('OneBag4', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
+local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 local AceDB3 = LibStub('AceDB-3.0')
 
-local L = LibStub('AceLocale-3.0'):GetLocale('OneBag4')
+local L = LibStub('AceLocale-3.0'):GetLocale('Kintama')
 local SearchEngine = LibStub('LibItemSearch-1.0')
 
-function OneBag4:OnInitialize()
-    self.db = AceDB3:New('OneBag4DB', common:DatabaseDefaults(), true)
+function Kintama:OnInitialize()
+    self.db = AceDB3:New('KintamaDB', common:DatabaseDefaults(), true)
 
     self.column_width = 39
     self.row_height = 39
@@ -22,12 +22,12 @@ function OneBag4:OnInitialize()
 
 	self.bag_indexes = {0, 1, 2, 3, 4 }
 
-    self.frame = common.frame:NewMainFrame('OneBag4Frame', self)
+    self.frame = common.frame:NewMainFrame('KintamaFrame', self)
     self.frame:SetPosition(self.db.profile.position)
     self.frame:CustomizeFrame(self.db.profile)
 end
 
-function OneBag4:OnEnable()
+function Kintama:OnEnable()
     self:SecureHook("IsBagOpen")
     self:RawHook("ToggleBag", true)
     self:RawHook("ToggleBackpack", "ToggleBag", true)
@@ -83,7 +83,7 @@ local function prepare_bag_slots(self, bag_id)
     end
 end
 
-function OneBag4:PrepareBagSlots(bag_id)
+function Kintama:PrepareBagSlots(bag_id)
     if not self.bag_frames then
         local bag_frames = {}
 
@@ -107,7 +107,7 @@ function OneBag4:PrepareBagSlots(bag_id)
     end
 end
 
-function OneBag4:SlotOrder()
+function Kintama:SlotOrder()
     local keys, keys_to_slots, slots, empty_slots = {}, {}, {}, {}
     local count, empty_count = 0, 0
 
@@ -146,7 +146,7 @@ function OneBag4:SlotOrder()
     return slots
 end
 
-function OneBag4:OrganizeBagSlots()
+function Kintama:OrganizeBagSlots()
     local max_columns, current_column, current_row, widest_column, just_incremented_row = self.db.profile.appearance.cols, 1, 1, 0, false
 
     for slot_key, slot_frame in pairs(self.slot_frames) do
@@ -186,7 +186,7 @@ end
 
 local colorCache = {}
 local plain = {r = .05, g = .05, b = .05}
-function OneBag4:ColorSlotBorder(slot_frame, force_color)
+function Kintama:ColorSlotBorder(slot_frame, force_color)
     local bag_frame = slot_frame:GetParent()
     local color = force_color or plain
 
@@ -244,7 +244,7 @@ function OneBag4:ColorSlotBorder(slot_frame, force_color)
     target:SetVertexColor(color.r, color.g, color.b)
 end
 
-function OneBag4:ApplySearchFilter(slot_frame)
+function Kintama:ApplySearchFilter(slot_frame)
     if self.search_term and #self.search_term > 1 then
         local link = GetContainerItemLink(slot_frame:GetParent():GetID(), slot_frame:GetID())
         if SearchEngine:Find(link, self.search_term) then
@@ -263,7 +263,7 @@ end
 **************************************************************************************************]]
 local type, ContainerFrame_Update = _G.type, _G.ContainerFrame_Update
 
-function OneBag4:IsBagOpen(bag_id)
+function Kintama:IsBagOpen(bag_id)
     if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
         return
     end
@@ -271,7 +271,7 @@ function OneBag4:IsBagOpen(bag_id)
     return self.is_opened and bag_id or nil
 end
 
-function OneBag4:ToggleBag(bag_id)
+function Kintama:ToggleBag(bag_id)
     if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
         return self.hooks.ToggleBag(bag_id)
     end
@@ -283,7 +283,7 @@ function OneBag4:ToggleBag(bag_id)
     end
 end
 
-function OneBag4:OpenBag(bag_id)
+function Kintama:OpenBag(bag_id)
     if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
         return self.hooks.OpenBag(bag_id)
     end
@@ -293,7 +293,7 @@ function OneBag4:OpenBag(bag_id)
     self.is_opened = true
 end
 
-function OneBag4:CloseBag(bag_id)
+function Kintama:CloseBag(bag_id)
     if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
         return self.hooks.CloseBag(bag_id)
     end
@@ -302,7 +302,7 @@ function OneBag4:CloseBag(bag_id)
     self.is_opened = false
 end
 
-function OneBag4:DecorateBagSlots(bag_id)
+function Kintama:DecorateBagSlots(bag_id)
     if not bag_id then
         for _, slot_frame in pairs(self.slot_frames) do
             if slot_frame:IsVisible() then
@@ -327,7 +327,7 @@ function OneBag4:DecorateBagSlots(bag_id)
     end
 end
 
-function OneBag4:UpdateAllBags()
+function Kintama:UpdateAllBags()
     self:PrepareBagSlots()
     self:OrganizeBagSlots()
     self:DecorateBagSlots()
@@ -339,7 +339,7 @@ function OneBag4:UpdateAllBags()
     end
 end
 
-function OneBag4:UpdateBags(bag_ids)
+function Kintama:UpdateBags(bag_ids)
     for bag_id, _ in pairs(bag_ids) do
         if self.bag_frames[bag_id] then
             self:PrepareBagSlots(bag_id)
@@ -356,7 +356,7 @@ function OneBag4:UpdateBags(bag_ids)
     end
 end
 
-function OneBag4:UpdateSearchResult(user)
+function Kintama:UpdateSearchResult(user)
     if not self.search_user_initiated then
         return
     end
@@ -371,17 +371,17 @@ end
 **************************************************************************************************]]
 local UnitName = _G.UnitName
 
-function OneBag4:OnShow(frame)
+function Kintama:OnShow(frame)
     self:UpdateAllBags()
 
     self.bag_update_bucket = self:RegisterBucketEvent('BAG_UPDATE', .1, 'UpdateBags')
-    self.search_update_bucket = self:RegisterBucketMessage('OneBag4_Searchbox_TextChanged', .35, 'UpdateSearchResult')
+    self.search_update_bucket = self:RegisterBucketMessage('Kintama_Searchbox_TextChanged', .35, 'UpdateSearchResult')
 
     self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateAllBags')
     self:RegisterEvent('UPDATE_INVENTORY_ALERTS', 'UpdateAllBags')
 end
 
-function OneBag4:OnHide(frame)
+function Kintama:OnHide(frame)
     self:UnregisterBucket(self.bag_update_bucket)
     self:UnregisterBucket(self.search_update_bucket)
 
@@ -391,7 +391,7 @@ function OneBag4:OnHide(frame)
     self:CloseBag() -- internal cleanup
 end
 
-function OneBag4:OnDragStart(frame)
+function Kintama:OnDragStart(frame)
     if not self.db.profile.behavior.locked then
         frame:StartMoving()
         frame.is_moving = true
@@ -402,7 +402,7 @@ function OneBag4:OnDragStart(frame)
     end
 end
 
-function OneBag4:OnDragStop(frame)
+function Kintama:OnDragStop(frame)
     frame:StopMovingOrSizing(self)
     if frame.is_moving then
         self.db.profile.position = frame:GetPosition()
@@ -415,7 +415,7 @@ function OneBag4:OnDragStop(frame)
     self.is_moving = false
 end
 
-function OneBag4:OnFrameCreate(frame)
+function Kintama:OnFrameCreate(frame)
     frame.money_frame = common.frame:MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
     frame.money_frame:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
 
@@ -423,16 +423,16 @@ function OneBag4:OnFrameCreate(frame)
     frame.slot_counts:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT', 10, 8)
 end
 
-function OneBag4:OnSearchBoxTextChanged(searchbox, userInput)
+function Kintama:OnSearchBoxTextChanged(searchbox, userInput)
     self.search_user_initiated = userInput
-    self:SendMessage('OneBag4_Searchbox_TextChanged')
+    self:SendMessage('Kintama_Searchbox_TextChanged')
 end
 
-function OneBag4:OnSearchBoxCleared(searchbox)
+function Kintama:OnSearchBoxCleared(searchbox)
     self.search_term = nil
     self:DecorateBagSlots()
 end
 
-function OneBag4:MainFrameTitle(bagFrame)
+function Kintama:MainFrameTitle(bagFrame)
     return L["%s's Bags"], UnitName('player')
 end

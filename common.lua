@@ -4,7 +4,7 @@ local _G = getfenv(0)
 local CreateFrame, LibStub, UIParent = _G.CreateFrame, _G.LibStub, _G.UIParent
 local getglobal, pairs = _G.getglobal, _G.pairs
 
-local L = LibStub("AceLocale-3.0"):GetLocale("OneBag4")
+local L = LibStub("AceLocale-3.0"):GetLocale("Kintama")
 
 
 function common:DatabaseDefaults()
@@ -81,7 +81,7 @@ local function GetPosition(frame)
 	return {
 		top = frame:GetTop(),
 		left = frame:GetLeft(),
-		parent = frame:GetParent():GetName()				
+		parent = frame:GetParent():GetName()
 	}
 end
 

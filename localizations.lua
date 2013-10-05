@@ -1,69 +1,69 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "enUS", true, true)
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "enUS", true, true)
 
 --@non-debug@
 
 --@end-non-debug@
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "deDE")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "deDE")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "esES")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "esMX")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "esMX")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "frFR")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "frFR")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "koKR")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "koKR")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "ruRU")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "ruRU")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "zhCN")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "zhCN")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
 
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBag4", "zhTW")
+local L = LibStub("AceLocale-3.0"):NewLocale("Kintama", "zhTW")
 
 if L then
     --@non-debug@
-    
+
     --@end-non-debug@
 end
