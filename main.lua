@@ -292,28 +292,6 @@ function Kintama:OnHide(frame)
 	self:CloseBag() -- internal cleanup
 end
 
-function Kintama:OnDragStart(frame)
-	frame:StartMoving()
-	frame.is_moving = true
-
-	for _, slot_frame in pairs(self.slot_frames) do
-		slot_frame:EnableMouse(false)
-	end
-end
-
-function Kintama:OnDragStop(frame)
-	frame:StopMovingOrSizing(self)
-	if frame.is_moving then
-		self.db.profile.position = frame:GetPosition()
-
-		for _, slot_frame in pairs(self.slot_frames) do
-			slot_frame:EnableMouse(true)
-		end
-	end
-
-	self.is_moving = false
-end
-
 function Kintama:OnFrameCreate(frame)
 	frame.money_frame = ns.MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
 	frame.money_frame:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
