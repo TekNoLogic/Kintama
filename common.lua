@@ -8,26 +8,6 @@ local _, common = ...
 -- Namespace
 common.frame = {}
 
--- Helpers
-local function CustomizeFrame(frame)
-	frame:SetBackdropColor(0,0,0, 0.65)
-	frame:SetClampedToScreen(true)
-	frame:SetFrameStrata('MEDIUM')
-end
-
-local function CustomizeFontString(fontstring, color, size)
-	fontstring:SetShadowOffset(.8, -.8)
-	fontstring:SetShadowColor(0, 0, 0, .5)
-	fontstring:SetTextColor(color.r, color.g, color.b)
-
-	fontstring:SetJustifyH("LEFT")
-	fontstring:SetFont("Fonts\\FRIZQT__.TTF", size)
-end
-
-local frameHelpers = {
-	CustomizeFrame = CustomizeFrame,
-}
-
 -- exposed API
 function common.frame:MakeBagFrame(bag_id, parent)
 	local bag_frame = CreateFrame("Frame", ('%sBag%d'):format(parent:GetName(), bag_id), parent)
@@ -42,10 +22,6 @@ function common.frame:MakeSlotFrame(bag_frame, slot_id)
 	local bag_id = bag_frame:GetID()
 
 	local slot_template = "ContainerFrameItemButtonTemplate"
-	if bag_id == -1 then
-			slot_template = "BankItemButtonGenericTemplate"
-	end
-
 	local slot_frame = CreateFrame("Button", ('%sItem%d'):format(bag_frame:GetName(), slot_id), bag_frame, slot_template)
 	slot_frame:SetID(slot_id)
 	slot_frame:SetFrameLevel(bag_frame:GetParent():GetFrameLevel()+10)
@@ -65,10 +41,6 @@ end
 
 function common.frame:NewMainFrame(name, delegate)
 	local frame = CreateFrame("Frame", name, UIParent)
-
-	for k, v in pairs(frameHelpers) do
-		frame[k] = v
-	end
 
 	frame:SetToplevel(true)
 	frame:EnableMouse(true)

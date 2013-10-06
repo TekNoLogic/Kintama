@@ -14,7 +14,8 @@ function Kintama:OnInitialize()
 
 	self.frame = common.frame:NewMainFrame('KintamaFrame', self)
 	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-	self.frame:CustomizeFrame()
+	self.frame:SetBackdropColor(0,0,0, 0.65)
+	self.frame:SetFrameStrata('MEDIUM')
 end
 
 function Kintama:OnEnable()
