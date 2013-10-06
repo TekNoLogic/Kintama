@@ -35,16 +35,13 @@ function Kintama:OnEnable()
 	self:RawHook("CloseBag", true)
 
 	local open = function()
-		self.was_opened = self.is_opened
-		if not self.is_opened then
+		if not self.frame:IsVisible() then
 			self:OpenBag()
 		end
 	end
 
 	local close = function(event)
-		if (event == "MAIL_CLOSED" and not self.is_reopened) or not self.was_opened then
-			self:CloseBag()
-		end
+		self:CloseBag()
 	end
 
 	self:RegisterEvent("AUCTION_HOUSE_SHOW",  open)
@@ -85,7 +82,7 @@ function Kintama:IsBagOpen(bag_id)
 		return
 	end
 
-	return self.is_opened and bag_id or nil
+	return self.frame:IsVisible() and bag_id or nil
 end
 
 function Kintama:ToggleBag(bag_id)
@@ -93,7 +90,7 @@ function Kintama:ToggleBag(bag_id)
 		return self.hooks.ToggleBag(bag_id)
 	end
 
-	if self.is_opened then
+	if self.frame:IsVisible() then
 		self:CloseBag()
 	else
 		self:OpenBag()
@@ -106,8 +103,6 @@ function Kintama:OpenBag(bag_id)
 	end
 
 	self.frame:Show()
-	self.is_reopened = self.is_opened
-	self.is_opened = true
 end
 
 function Kintama:CloseBag(bag_id)
@@ -116,7 +111,6 @@ function Kintama:CloseBag(bag_id)
 	end
 
 	self.frame:Hide()
-	self.is_opened = false
 end
 
 function Kintama:UpdateAllBags()
