@@ -3,8 +3,6 @@ local myname, ns = ...
 
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 
-local MAX_COLS = 22
-
 function Kintama:OnInitialize()
 	self.column_width = 39
 	self.row_height = 39
