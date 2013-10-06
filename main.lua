@@ -1,7 +1,7 @@
 
 local myname, ns = ...
 
-local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
+local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 
 function Kintama:OnInitialize()
 	self.column_width = 39
@@ -27,21 +27,27 @@ function Kintama:OnInitialize()
 end
 
 function Kintama:OnEnable()
-	self:RawHook("ToggleBag", true)
-	self:RawHook("ToggleBackpack", "ToggleBag", true)
-	self:RawHook("ToggleAllBags", "ToggleBag", true)
-	self:RawHook("OpenBag", true)
-	self:RawHook("CloseBag", true)
+	local function open()
+		Kintama.frame:Show()
+	end
 
-	local open = function()
-		if not self.frame:IsVisible() then
-			self:OpenBag()
+	local function close()
+		Kintama.frame:Hide()
+	end
+
+	local function toggle()
+		if Kintama.frame:IsVisible() then
+			Kintama.frame:Hide()
+		else
+			Kintama.frame:Show()
 		end
 	end
 
-	local close = function(event)
-		self:CloseBag()
-	end
+	ToggleBag = toggle
+	ToggleBackpack = toggle
+	ToggleAllBags = toggle
+	OpenBag = open
+	CloseBag = close
 
 	self:RegisterEvent("AUCTION_HOUSE_SHOW",  open)
 	self:RegisterEvent("AUCTION_HOUSE_CLOSED",  close)
@@ -76,34 +82,6 @@ end
 --[[************************************************************************************************
 -- Event Handlers
 **************************************************************************************************]]
-function Kintama:ToggleBag(bag_id)
-	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
-		return self.hooks.ToggleBag(bag_id)
-	end
-
-	if self.frame:IsVisible() then
-		self:CloseBag()
-	else
-		self:OpenBag()
-	end
-end
-
-function Kintama:OpenBag(bag_id)
-	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
-		return self.hooks.OpenBag(bag_id)
-	end
-
-	self.frame:Show()
-end
-
-function Kintama:CloseBag(bag_id)
-	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
-		return self.hooks.CloseBag(bag_id)
-	end
-
-	self.frame:Hide()
-end
-
 function Kintama:UpdateAllBags()
 	self:OrganizeBagSlots()
 end
@@ -130,6 +108,4 @@ function Kintama:OnHide(frame)
 
 	self:UnregisterEvent('BAG_UPDATE_COOLDOWN')
 	self:UnregisterEvent('UPDATE_INVENTORY_ALERTS')
-
-	self:CloseBag() -- internal cleanup
 end
