@@ -12,9 +12,8 @@ local frame = CreateFrame("Frame", 'KintamaFrame', UIParent)
 frame:Hide()
 frame:SetToplevel(true)
 frame:EnableMouse(true)
-frame:SetSize(400, 200)
+frame:SetSize(400, 227)
 frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-frame:SetHeight(5 * 39 + BOTTOM_BORDER + TOP_BORDER)
 frame:SetFrameStrata('MEDIUM')
 
 
