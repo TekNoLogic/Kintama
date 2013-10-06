@@ -8,7 +8,7 @@ local function ColorBorder(self)
 	local bag_frame = self:GetParent()
 	local color = plain
 
-	local link = GetContainerItemLink(bag_frame:GetID(), self:GetID())
+	local link = GetContainerItemLink(bag_frame.id, self.id)
 	if link then
 		local _, _, rarity = GetItemInfo(link)
 		if rarity and rarity > 1 then
@@ -29,6 +29,7 @@ end
 function ns.MakeSlotFrame(bag, slot)
 	local name = string.format('%sItem%d', bag:GetName(), slot)
 	local frame = CreateFrame("Button", name, bag, "ContainerFrameItemButtonTemplate")
+	frame.id = slot
 	frame:SetID(slot)
 
 	frame:ClearAllPoints()

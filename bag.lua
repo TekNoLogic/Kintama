@@ -11,7 +11,7 @@ end
 
 
 local function Update(self)
-	local num_slots = GetContainerNumSlots(self:GetID())
+	local num_slots = GetContainerNumSlots(self.id)
 	self.size = num_slots
 
 	self:SetWidth(num_slots * 39)
