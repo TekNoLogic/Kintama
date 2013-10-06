@@ -8,19 +8,6 @@ local function ColorBorder(self)
 	local bag_frame = self:GetParent()
 	local color = plain
 
-	if not self.border then
-		-- Thanks to oglow for this method
-		local border = self:CreateTexture(nil, "OVERLAY")
-		border:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
-		border:SetBlendMode("ADD")
-		border:SetAlpha(.5)
-
-		border:SetPoint('CENTER', self, 'CENTER', 0, 1)
-		border:SetWidth(self:GetWidth() * 2 - 5)
-		border:SetHeight(self:GetHeight() * 2 - 5)
-		self.border = border
-	end
-
 	local link = GetContainerItemLink(bag_frame:GetID(), self:GetID())
 	if link then
 		local _, _, rarity = GetItemInfo(link)
@@ -51,6 +38,16 @@ function ns.MakeSlotFrame(bag, slot)
 		frame:SetPoint('LEFT', bag.slots[slot-1], 'RIGHT', 2, 0)
 	end
 
+	local border = frame:CreateTexture(nil, "OVERLAY")
+	border:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
+	border:SetBlendMode("ADD")
+	border:SetAlpha(.5)
+
+	border:SetPoint('CENTER', frame, 'CENTER', 0, 1)
+	border:SetWidth(frame:GetWidth() * 2 - 5)
+	border:SetHeight(frame:GetHeight() * 2 - 5)
+
+	frame.border = border
 	frame.ColorBorder = ColorBorder
 
 	return frame
