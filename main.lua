@@ -80,7 +80,10 @@ for bag=1,4 do bagids[bag] = GetInventorySlotInfo("Bag"..(bag-1).."Slot") end
 function ns.BAG_UPDATE_DELAYED()
 	for bag=1,4 do
 		local link = GetInventoryItemLink("player", bagids[bag])
-		if bagstates[bag] ~= link then ns.bags[bag]:Update() end
+		if bagstates[bag] ~= link then
+			ns.bags[bag]:Update()
+			ns.bags[bag].bagslot:Update()
+		end
 		bagstates[bag] = link
 	end
 end
