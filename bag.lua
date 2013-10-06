@@ -54,7 +54,7 @@ function ns.MakeBagFrame(bag, parent)
 	if bag == 0 then
 		frame:SetPoint('TOPLEFT', parent, 8, -8)
 	else
-		frame:SetPoint('TOPLEFT', ns.bags[bag-1], 'BOTTOMLEFT', 0, 2)
+		frame:SetPoint('TOPLEFT', ns.bags[bag-1], 'BOTTOMLEFT', 0, -2)
 	end
 
 	frame:SetScript('OnShow', OnShow)
