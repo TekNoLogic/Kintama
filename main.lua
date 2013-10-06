@@ -12,16 +12,43 @@ function Kintama:OnInitialize()
 	self.right_border = 5
 	self.left_border = 8
 
-	self.frame = ns.NewMainFrame('KintamaFrame', self)
-	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-	self.frame:SetHeight(5 * 39 + self.bottom_border + self.top_border)
-	self.frame:SetBackdropColor(0,0,0, 0.65)
-	self.frame:SetFrameStrata('MEDIUM')
+	local frame = CreateFrame("Frame", 'KintamaFrame', UIParent)
+	frame:Hide()
+	frame:SetToplevel(true)
+	frame:EnableMouse(true)
+	frame:SetSize(400, 200)
+	frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	frame:SetHeight(5 * 39 + self.bottom_border + self.top_border)
+	frame:SetFrameStrata('MEDIUM')
+
+	frame:SetBackdrop({
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		tile = true, tileSize = 16, edgeSize = 16,
+		insets = {left = 5, right = 5, top = 5, bottom = 5},
+	})
+	frame:SetBackdropColor(0,0,0, 0.65)
+
+	frame:SetScript("OnShow", function(...)
+		self:OnShow(frame)
+	end)
+
+	frame:SetScript("OnHide", function(...)
+		self:OnHide(frame)
+	end)
+
+	table.insert(UISpecialFrames, frame:GetName())
+
+	self.frame = frame
 
 	for bag_id=0,4 do
 		ns.MakeBagFrame(bag_id, self.frame)
 	end
 	ns.MakeBagFrame = nil
+
+	local money = CreateFrame('Frame', frame:GetName()..'MoneyFrame', frame, 'SmallMoneyFrameTemplate')
+	money:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
+	SmallMoneyFrame_OnLoad(money, 'PLAYER')
 
 	BagItemSearchBox:Hide()
 	BagItemSearchBox.Show = BagItemSearchBox.Hide
@@ -80,7 +107,7 @@ end
 
 
 function Kintama:OnShow(frame)
-	self:UpdateAllBags()
+	self:UpdateBags()
 
 	self.bag_update_bucket = self:RegisterBucketEvent('BAG_UPDATE', .1, 'UpdateBags')
 
