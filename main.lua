@@ -119,18 +119,8 @@ function Kintama:CloseBag(bag_id)
 	self.is_opened = false
 end
 
-function Kintama:DecorateBagSlots(bag)
-	if not bag then
-		for i,bag in pairs(ns.bags) do bag:ColorSlots() end
-		return
-	end
-
-	ns.bags[bag]:ColorSlots()
-end
-
 function Kintama:UpdateAllBags()
 	self:OrganizeBagSlots()
-	self:DecorateBagSlots()
 
 	for _,bag in pairs(ns.bags) do
 		if bag.size > 0 then
@@ -144,7 +134,6 @@ function Kintama:UpdateBags(bag_ids)
 	for bag_id, _ in pairs(bag_ids) do
 		local bag_frame = ns.bags[bag_id]
 		if bag_frame and bag_frame.size > 0 then
-			self:DecorateBagSlots(bag_id)
 			ContainerFrame_Update(bag_frame)
 		end
 	end

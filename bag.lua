@@ -25,6 +25,8 @@ local function Update(self)
 			slot:Hide()
 		end
 	end
+
+	self:ColorSlots()
 end
 
 
