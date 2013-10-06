@@ -12,7 +12,7 @@ end
 
 function ns.MakeBagSlotFrame(bag, parent)
 	local name = parent:GetName()..'Slot'
-	local frame = CreateFrame('CheckButton', name, parent:GetParent(), 'ItemButtonTemplate,ItemAnimTemplate')
+	local frame = CreateFrame('CheckButton', name, parent:GetParent(), 'ItemButtonTemplate')
 	frame:SetSize(37, 37)
 	frame:SetPoint('LEFT', parent)
 
