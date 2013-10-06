@@ -83,17 +83,13 @@ function Kintama:PrepareBagSlots(bag_id)
 end
 
 function Kintama:OrganizeBagSlots()
-	local widest_column, slot_count, free_slot_count = 0, 0, 0
+	local widest_column = 0
 
 	for bag=0,4 do
 		local f = ns.bags[bag]
 		f:Update()
 		widest_column = math.max(widest_column, ns.bags[bag]:GetWidth())
-		slot_count = slot_count + f.size
-		free_slot_count = free_slot_count + f.free_slots
 	end
-
-	self.frame.slot_counts:SetFormattedText('%d/%d Slots', slot_count - free_slot_count, slot_count)
 
 	self.frame:SetWidth(widest_column + self.left_border + self.right_border)
 end
@@ -204,7 +200,4 @@ end
 function Kintama:OnFrameCreate(frame)
 	frame.money_frame = ns.MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
 	frame.money_frame:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
-
-	frame.slot_counts = frame:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
-	frame.slot_counts:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT', 10, 8)
 end
