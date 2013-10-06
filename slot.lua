@@ -46,7 +46,5 @@ function ns.MakeSlotFrame(bag, slot)
 
 	frame.ColorBorder = ColorBorder
 
-	bag.slots[slot] = frame
-
 	return frame
 end

@@ -17,7 +17,13 @@ function ns.MakeBagFrame(bag, parent)
 
 	frame.ColorSlots = ColorSlots
 
-	frame.slots = {}
+	frame.slots = setmetatable({}, {
+		__index = function(t,i)
+			local f = ns.MakeSlotFrame(frame, i)
+			t[i] = f
+			return f
+		end
+	})
 
 	ns.bags[bag] = frame
 

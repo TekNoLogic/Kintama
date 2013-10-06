@@ -60,35 +60,15 @@ end
 --[[************************************************************************************************
 -- Bag methods
 **************************************************************************************************]]
-local function GetSlotFrame(bag, slot)
-	local slot_key = ('%s:%s'):format(bag, slot)
-	if not Kintama.slot_frames[slot_key] then
-		Kintama.slot_frames[slot_key] = ns.MakeSlotFrame(ns.bags[bag], slot)
-	end
-
-	return Kintama.slot_frames[slot_key]
-end
-
 local function prepare_bag_slots(self, bag_id)
 	local bag_size = GetContainerNumSlots(bag_id)
 	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
 
 	ns.bags[bag_id].size = bag_size
 	ns.bags[bag_id].free_slots = free_slots
-
-	for slot_id = 1, bag_size do
-		local slot_key = ('%s:%s'):format(bag_id, slot_id)
-		if not self.slot_frames[slot_key] then
-			self.slot_frames[slot_key] = ns.MakeSlotFrame(ns.bags[bag_id], slot_id)
-		end
-	end
 end
 
 function Kintama:PrepareBagSlots(bag_id)
-	if not self.slot_frames then
-		self.slot_frames = {}
-	end
-
 	if bag_id then
 		prepare_bag_slots(self, bag_id)
 	else
@@ -101,16 +81,18 @@ end
 function Kintama:OrganizeBagSlots()
 	local widest_column = 0
 
-	for slot_key, slot_frame in pairs(self.slot_frames) do
-		slot_frame:Hide()
-	end
-
 	for bag=0,4 do
 		local num_slots = GetContainerNumSlots(bag)
 		widest_column = math.max(widest_column, num_slots)
 
+		if #ns.bags[bag].slots > num_slots then
+			for i=(num_slots+1),(#ns.bags[bag].slots) do
+				bag.slots[i]:Hide()
+			end
+		end
+
 		for slot=1,num_slots do
-			local slot_frame = GetSlotFrame(bag, slot)
+			local slot_frame = ns.bags[bag].slots[slot]
 			slot_frame:ClearAllPoints()
 			slot_frame:SetPoint('TOPLEFT', self.frame:GetName(), 'TOPLEFT', self.left_border + self.column_width * (slot - 1), 0 - self.top_border - (self.row_height * bag))
 			slot_frame:SetFrameLevel(self.frame:GetFrameLevel()+20)
