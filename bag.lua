@@ -60,6 +60,7 @@ function ns.MakeBagFrame(bag, parent)
 	frame:SetScript('OnShow', OnShow)
 	frame:SetScript('OnHide', OnHide)
 	frame:SetScript('OnEvent', OnEvent)
+	frame:SetScript('OnSizeChanged', ns.ResizeFrame)
 
 	frame.Update = Update
 	frame.ColorSlots = ColorSlots

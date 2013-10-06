@@ -2,10 +2,10 @@
 local myname, ns = ...
 
 
-local top_border = 8
-local bottom_border = 24
-local right_border = 5
-local left_border = 8
+local TOP_BORDER = 8
+local BOTTOM_BORDER = 24
+local RIGHT_BORDER = 5
+local LEFT_BORDER = 8
 
 
 local frame = CreateFrame("Frame", 'KintamaFrame', UIParent)
@@ -14,7 +14,7 @@ frame:SetToplevel(true)
 frame:EnableMouse(true)
 frame:SetSize(400, 200)
 frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-frame:SetHeight(5 * 39 + bottom_border + top_border)
+frame:SetHeight(5 * 39 + BOTTOM_BORDER + TOP_BORDER)
 frame:SetFrameStrata('MEDIUM')
 
 
@@ -25,17 +25,6 @@ frame:SetBackdrop({
 	insets = {left = 5, right = 5, top = 5, bottom = 5},
 })
 frame:SetBackdropColor(0,0,0, 0.65)
-
-
-frame:SetScript("OnShow", function()
-	local widest_column = 0
-
-	for bag=0,4 do
-		widest_column = math.max(widest_column, ns.bags[bag]:GetWidth())
-	end
-
-	frame:SetWidth(widest_column + left_border + right_border)
-end)
 
 
 local function open() frame:Show() end
@@ -83,4 +72,15 @@ function ns.OnLogin()
 	ns.RegisterEvent("TRADE_CLOSED", close)
 	ns.RegisterEvent("GUILDBANKFRAME_OPENED", open)
 	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", close)
+end
+
+
+function ns.ResizeFrame()
+	local widest_column = 0
+
+	for bag=0,4 do
+		widest_column = math.max(widest_column, ns.bags[bag]:GetWidth())
+	end
+
+	frame:SetWidth(widest_column + LEFT_BORDER + RIGHT_BORDER)
 end
