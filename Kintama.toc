@@ -8,11 +8,7 @@
 
 ## OptionalDeps: Ace3
 
-libs\LibStub\LibStub.lua
-libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
-
-libs\AceAddon-3.0\AceAddon-3.0.xml
-libs\AceEvent-3.0\AceEvent-3.0.xml
+externals\events.lua
 
 main.lua
 bag.lua

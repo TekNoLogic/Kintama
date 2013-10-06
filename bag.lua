@@ -31,9 +31,23 @@ local function Update(self)
 end
 
 
+local function OnHide(self) self:UnregisterAllEvents() end
+local function OnShow(self)
+	self:Update()
+	self:RegisterEvent('BAG_UPDATE')
+	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
+	self:RegisterEvent('UPDATE_INVENTORY_ALERTS')
+end
+local function OnEvent(self, event, bag, ...)
+	if event == 'BAG_UPDATE' and bag ~= self.id then return end
+	self:Update()
+end
+
+
 function ns.MakeBagFrame(bag, parent)
 	local name = string.format('%sBag%d', parent:GetName(), bag)
 	local frame = CreateFrame("Frame", name, parent)
+	frame.id = bag
 	frame:SetID(bag)
 
 	frame:SetHeight(39)
@@ -42,6 +56,10 @@ function ns.MakeBagFrame(bag, parent)
 	else
 		frame:SetPoint('TOPLEFT', ns.bags[bag-1], 'BOTTOMLEFT', 0, 2)
 	end
+
+	frame:SetScript('OnShow', OnShow)
+	frame:SetScript('OnHide', OnHide)
+	frame:SetScript('OnEvent', OnEvent)
 
 	frame.Update = Update
 	frame.ColorSlots = ColorSlots
