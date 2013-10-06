@@ -64,7 +64,7 @@ end
 --[[************************************************************************************************
 -- Bag methods
 **************************************************************************************************]]
-local function prepare_bag_slots(self, bag_id)
+local function prepare_bag_slots(bag_id)
 	local bag_size = GetContainerNumSlots(bag_id)
 	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
 
@@ -74,10 +74,10 @@ end
 
 function Kintama:PrepareBagSlots(bag_id)
 	if bag_id then
-		prepare_bag_slots(self, bag_id)
+		prepare_bag_slots(bag_id)
 	else
 		for bag_id=0,4 do
-			prepare_bag_slots(self, bag_id)
+			prepare_bag_slots(bag_id)
 		end
 	end
 end
