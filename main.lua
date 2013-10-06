@@ -59,6 +59,7 @@ end
 
 
 function ns.OnLogin()
+	ns.RegisterEvent("BAG_UPDATE_DELAYED")
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
 	ns.RegisterEvent("BANKFRAME_OPENED", open)
@@ -71,6 +72,17 @@ function ns.OnLogin()
 	ns.RegisterEvent("TRADE_CLOSED", close)
 	ns.RegisterEvent("GUILDBANKFRAME_OPENED", open)
 	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", close)
+end
+
+
+local bagids, bagstates = {}, {}
+for bag=1,4 do bagids[bag] = GetInventorySlotInfo("Bag"..(bag-1).."Slot") end
+function ns.BAG_UPDATE_DELAYED()
+	for bag=1,4 do
+		local link = GetInventoryItemLink("player", bagids[bag])
+		if bagstates[bag] ~= link then ns.bags[bag]:Update() end
+		bagstates[bag] = link
+	end
 end
 
 

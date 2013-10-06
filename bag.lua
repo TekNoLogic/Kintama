@@ -14,6 +14,12 @@ local function Update(self)
 	local num_slots = GetContainerNumSlots(self.id)
 	self.size = num_slots
 
+	if num_slots == 0 then
+		self:SetWidth(1)
+		for i,slot in pairs(self.slots) do slot:Hide() end
+		return
+	end
+
 	self:SetWidth(num_slots * 39)
 
 	local f = self.slots[num_slots] -- Touch to ensure slot frames exist
@@ -27,7 +33,7 @@ local function Update(self)
 	end
 
 	self:ColorSlots()
-	if num_slots > 0 then ContainerFrame_Update(self) end
+	ContainerFrame_Update(self)
 end
 
 
