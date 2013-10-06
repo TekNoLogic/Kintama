@@ -20,6 +20,9 @@ function Kintama:OnInitialize()
 		ns.MakeBagFrame(bag_id, self.frame)
 	end
 	ns.MakeBagFrame = nil
+
+	BagItemSearchBox:Hide()
+	BagItemSearchBox.Show = BagItemSearchBox.Hide
 end
 
 function Kintama:OnEnable()
