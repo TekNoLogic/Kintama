@@ -17,4 +17,5 @@ libs\AceHook-3.0\AceHook-3.0.xml
 
 common.lua
 main.lua
+bag.lua
 slot.lua

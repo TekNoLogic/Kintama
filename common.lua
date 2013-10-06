@@ -7,15 +7,6 @@ local myname, ns = ...
 **************************************************************************************************]]
 
 -- exposed API
-function ns.MakeBagFrame(bag_id, parent)
-	local bag_frame = CreateFrame("Frame", ('%sBag%d'):format(parent:GetName(), bag_id), parent)
-	bag_frame:SetID(bag_id)
-
-	bag_frame.slot_frames = {}
-
-	return bag_frame
-end
-
 function ns.MakeMoneyFrame(frame_name, parent, type)
 	local money_frame = CreateFrame('Frame', parent:GetName()..frame_name, parent, 'SmallMoneyFrameTemplate')
 	SmallMoneyFrame_OnLoad(money_frame, type)
