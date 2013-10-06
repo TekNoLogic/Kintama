@@ -3,6 +3,7 @@ local myname, ns = ...
 
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 
+
 function Kintama:OnInitialize()
 	self.column_width = 39
 	self.row_height = 39
@@ -25,6 +26,7 @@ function Kintama:OnInitialize()
 	BagItemSearchBox:Hide()
 	BagItemSearchBox.Show = BagItemSearchBox.Hide
 end
+
 
 function Kintama:OnEnable()
 	local function open()
@@ -63,10 +65,8 @@ function Kintama:OnEnable()
 	self:RegisterEvent("GUILDBANKFRAME_CLOSED", close)
 end
 
---[[************************************************************************************************
--- Bag methods
-**************************************************************************************************]]
-function Kintama:OrganizeBagSlots()
+
+function Kintama:UpdateBags()
 	local widest_column = 0
 
 	for bag=0,4 do
@@ -79,29 +79,15 @@ function Kintama:OrganizeBagSlots()
 end
 
 
---[[************************************************************************************************
--- Event Handlers
-**************************************************************************************************]]
-function Kintama:UpdateAllBags()
-	self:OrganizeBagSlots()
-end
-
-function Kintama:UpdateBags(bag_ids)
-	self:OrganizeBagSlots()
-end
-
-
---[[************************************************************************************************
--- Frame delegates
-**************************************************************************************************]]
 function Kintama:OnShow(frame)
 	self:UpdateAllBags()
 
 	self.bag_update_bucket = self:RegisterBucketEvent('BAG_UPDATE', .1, 'UpdateBags')
 
-	self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateAllBags')
-	self:RegisterEvent('UPDATE_INVENTORY_ALERTS', 'UpdateAllBags')
+	self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateBags')
+	self:RegisterEvent('UPDATE_INVENTORY_ALERTS', 'UpdateBags')
 end
+
 
 function Kintama:OnHide(frame)
 	self:UnregisterBucket(self.bag_update_bucket)
