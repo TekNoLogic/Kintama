@@ -34,7 +34,7 @@ function ns.MakeSlotFrame(bag, slot)
 
 	frame:ClearAllPoints()
 	if slot == 1 then
-		frame:SetPoint('LEFT', bag)
+		frame:SetPoint('LEFT', bag, 42, 0)
 	else
 		frame:SetPoint('LEFT', bag.slots[slot-1], 'RIGHT', 2, 0)
 	end

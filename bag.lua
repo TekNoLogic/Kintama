@@ -20,7 +20,7 @@ local function Update(self)
 		return
 	end
 
-	self:SetWidth(num_slots * 39)
+	self:SetWidth(num_slots * 39 + 42)
 
 	local f = self.slots[num_slots] -- Touch to ensure slot frames exist
 
@@ -78,6 +78,10 @@ function ns.MakeBagFrame(bag, parent)
 			return f
 		end
 	})
+
+	if bag ~= 0 then
+		ns.MakeBagSlotFrame(bag, frame)
+	end
 
 	ns.bags[bag] = frame
 

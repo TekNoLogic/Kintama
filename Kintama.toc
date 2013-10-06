@@ -11,5 +11,6 @@
 externals\events.lua
 
 main.lua
+bagslot.lua
 bag.lua
 slot.lua
