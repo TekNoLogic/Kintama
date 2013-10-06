@@ -25,7 +25,6 @@ function ns.MakeBagSlotFrame(bag, parent)
 
 	frame.icon:SetTexture(texture)
 	frame.backgroundTextureName = texture
-	frame.UpdateTooltip = PaperDollItemSlotButton_OnEnter
 
 	frame.UpdateTooltip = BagSlotButton_OnEnter
 	frame.Update = Update
