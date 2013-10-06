@@ -27,7 +27,6 @@ function Kintama:OnInitialize()
 end
 
 function Kintama:OnEnable()
-	self:SecureHook("IsBagOpen")
 	self:RawHook("ToggleBag", true)
 	self:RawHook("ToggleBackpack", "ToggleBag", true)
 	self:RawHook("ToggleAllBags", "ToggleBag", true)
@@ -77,14 +76,6 @@ end
 --[[************************************************************************************************
 -- Event Handlers
 **************************************************************************************************]]
-function Kintama:IsBagOpen(bag_id)
-	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
-		return
-	end
-
-	return self.frame:IsVisible() and bag_id or nil
-end
-
 function Kintama:ToggleBag(bag_id)
 	if type(bag_id) == "number" and (bag_id < 0 or bag_id > 4) then
 		return self.hooks.ToggleBag(bag_id)
