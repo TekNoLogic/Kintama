@@ -142,8 +142,3 @@ function Kintama:OnHide(frame)
 
 	self:CloseBag() -- internal cleanup
 end
-
-function Kintama:OnFrameCreate(frame)
-	frame.money_frame = ns.MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
-	frame.money_frame:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
-end

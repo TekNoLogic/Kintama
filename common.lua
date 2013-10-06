@@ -7,12 +7,6 @@ local myname, ns = ...
 **************************************************************************************************]]
 
 -- exposed API
-function ns.MakeMoneyFrame(frame_name, parent, type)
-	local money_frame = CreateFrame('Frame', parent:GetName()..frame_name, parent, 'SmallMoneyFrameTemplate')
-	SmallMoneyFrame_OnLoad(money_frame, type)
-	return money_frame
-end
-
 function ns.NewMainFrame(name, delegate)
 	local frame = CreateFrame("Frame", name, UIParent)
 
@@ -36,7 +30,9 @@ function ns.NewMainFrame(name, delegate)
 		delegate:OnHide(frame)
 	end)
 
-	delegate:OnFrameCreate(frame)
+	local money = CreateFrame('Frame', frame:GetName()..'MoneyFrame', frame, 'SmallMoneyFrameTemplate')
+	money:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
+	SmallMoneyFrame_OnLoad(money, 'PLAYER')
 
 	table.insert(UISpecialFrames, frame:GetName())
 
