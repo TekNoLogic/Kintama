@@ -1,5 +1,7 @@
 local _, common = ...
 
+local myname, ns = ...
+
 local Kintama = LibStub('AceAddon-3.0'):NewAddon('Kintama', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceBucket-3.0')
 
 local MAX_COLS = 22
@@ -59,7 +61,7 @@ end
 local function GetSlotFrame(bag, slot)
 	local slot_key = ('%s:%s'):format(bag, slot)
 	if not Kintama.slot_frames[slot_key] then
-		Kintama.slot_frames[slot_key] = common.frame:MakeSlotFrame(Kintama.bag_frames[bag], slot)
+		Kintama.slot_frames[slot_key] = ns.MakeSlotFrame(Kintama.bag_frames[bag], slot)
 	end
 
 	return Kintama.slot_frames[slot_key]
@@ -75,7 +77,7 @@ local function prepare_bag_slots(self, bag_id)
 	for slot_id = 1, bag_size do
 		local slot_key = ('%s:%s'):format(bag_id, slot_id)
 		if not self.slot_frames[slot_key] then
-			self.slot_frames[slot_key] = common.frame:MakeSlotFrame(self.bag_frames[bag_id], slot_id)
+			self.slot_frames[slot_key] = ns.MakeSlotFrame(self.bag_frames[bag_id], slot_id)
 		end
 	end
 end

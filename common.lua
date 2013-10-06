@@ -18,21 +18,6 @@ function common.frame:MakeBagFrame(bag_id, parent)
 	return bag_frame
 end
 
-function common.frame:MakeSlotFrame(bag_frame, slot_id)
-	local bag_id = bag_frame:GetID()
-
-	local slot_template = "ContainerFrameItemButtonTemplate"
-	local slot_frame = CreateFrame("Button", ('%sItem%d'):format(bag_frame:GetName(), slot_id), bag_frame, slot_template)
-	slot_frame:SetID(slot_id)
-	slot_frame:SetFrameLevel(bag_frame:GetParent():GetFrameLevel()+10)
-
-	slot_frame:SetFrameStrata(bag_frame:GetParent():GetFrameStrata())
-
-	bag_frame.slot_frames[slot_id] = slot_frame
-
-	return slot_frame
-end
-
 function common.frame:MakeMoneyFrame(frame_name, parent, type)
 	local money_frame = CreateFrame('Frame', parent:GetName()..frame_name, parent, 'SmallMoneyFrameTemplate')
 	SmallMoneyFrame_OnLoad(money_frame, type)
