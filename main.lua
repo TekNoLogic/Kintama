@@ -121,22 +121,10 @@ end
 
 function Kintama:UpdateAllBags()
 	self:OrganizeBagSlots()
-
-	for _,bag in pairs(ns.bags) do
-		if bag.size > 0 then
-			ContainerFrame_Update(bag)
-		end
-	end
 end
 
 function Kintama:UpdateBags(bag_ids)
 	self:OrganizeBagSlots()
-	for bag_id, _ in pairs(bag_ids) do
-		local bag_frame = ns.bags[bag_id]
-		if bag_frame and bag_frame.size > 0 then
-			ContainerFrame_Update(bag_frame)
-		end
-	end
 end
 
 

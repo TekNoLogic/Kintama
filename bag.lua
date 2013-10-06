@@ -27,6 +27,7 @@ local function Update(self)
 	end
 
 	self:ColorSlots()
+	if num_slots > 0 then ContainerFrame_Update(self) end
 end
 
 
