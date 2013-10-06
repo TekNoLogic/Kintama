@@ -106,10 +106,10 @@ function Kintama:OrganizeBagSlots()
 	end
 
 	for bag=0,4 do
-		local slots = GetContainerNumSlots(bag)
-		widest_column = math.max(widest_column, slots)
+		local num_slots = GetContainerNumSlots(bag)
+		widest_column = math.max(widest_column, num_slots)
 
-		for slot=1,slots do
+		for slot=1,num_slots do
 			local slot_frame = GetSlotFrame(bag, slot)
 			slot_frame:ClearAllPoints()
 			slot_frame:SetPoint('TOPLEFT', self.frame:GetName(), 'TOPLEFT', self.left_border + self.column_width * (slot - 1), 0 - self.top_border - (self.row_height * bag))
@@ -187,9 +187,9 @@ function Kintama:UpdateAllBags()
 	self:OrganizeBagSlots()
 	self:DecorateBagSlots()
 
-	for _, bag_frame in pairs(ns.bags) do
-		if bag_frame.size > 0 then
-			ContainerFrame_Update(bag_frame)
+	for _,bag in pairs(ns.bags) do
+		if bag.size > 0 then
+			ContainerFrame_Update(bag)
 		end
 	end
 end
