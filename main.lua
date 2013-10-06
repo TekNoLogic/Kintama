@@ -64,24 +64,6 @@ end
 --[[************************************************************************************************
 -- Bag methods
 **************************************************************************************************]]
-local function prepare_bag_slots(bag_id)
-	local bag_size = GetContainerNumSlots(bag_id)
-	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
-
-	ns.bags[bag_id].size = bag_size
-	ns.bags[bag_id].free_slots = free_slots
-end
-
-function Kintama:PrepareBagSlots(bag_id)
-	if bag_id then
-		prepare_bag_slots(bag_id)
-	else
-		for bag_id=0,4 do
-			prepare_bag_slots(bag_id)
-		end
-	end
-end
-
 function Kintama:OrganizeBagSlots()
 	local widest_column = 0
 
@@ -147,7 +129,6 @@ function Kintama:DecorateBagSlots(bag)
 end
 
 function Kintama:UpdateAllBags()
-	self:PrepareBagSlots()
 	self:OrganizeBagSlots()
 	self:DecorateBagSlots()
 
@@ -159,12 +140,6 @@ function Kintama:UpdateAllBags()
 end
 
 function Kintama:UpdateBags(bag_ids)
-	for bag_id, _ in pairs(bag_ids) do
-		if ns.bags[bag_id] then
-			self:PrepareBagSlots(bag_id)
-		end
-	end
-
 	self:OrganizeBagSlots()
 	for bag_id, _ in pairs(bag_ids) do
 		local bag_frame = ns.bags[bag_id]
