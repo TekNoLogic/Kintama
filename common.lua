@@ -1,4 +1,5 @@
-local _, common = ...
+
+local myname, ns = ...
 
 
 --[[************************************************************************************************
@@ -6,10 +7,10 @@ local _, common = ...
 **************************************************************************************************]]
 
 -- Namespace
-common.frame = {}
+ns.frame = {}
 
 -- exposed API
-function common.frame:MakeBagFrame(bag_id, parent)
+function ns.frame:MakeBagFrame(bag_id, parent)
 	local bag_frame = CreateFrame("Frame", ('%sBag%d'):format(parent:GetName(), bag_id), parent)
 	bag_frame:SetID(bag_id)
 
@@ -18,13 +19,13 @@ function common.frame:MakeBagFrame(bag_id, parent)
 	return bag_frame
 end
 
-function common.frame:MakeMoneyFrame(frame_name, parent, type)
+function ns.frame:MakeMoneyFrame(frame_name, parent, type)
 	local money_frame = CreateFrame('Frame', parent:GetName()..frame_name, parent, 'SmallMoneyFrameTemplate')
 	SmallMoneyFrame_OnLoad(money_frame, type)
 	return money_frame
 end
 
-function common.frame:NewMainFrame(name, delegate)
+function ns.frame:NewMainFrame(name, delegate)
 	local frame = CreateFrame("Frame", name, UIParent)
 
 	frame:SetToplevel(true)

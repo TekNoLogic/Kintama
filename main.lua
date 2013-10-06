@@ -1,4 +1,3 @@
-local _, common = ...
 
 local myname, ns = ...
 
@@ -14,7 +13,7 @@ function Kintama:OnInitialize()
 	self.right_border = 5
 	self.left_border = 8
 
-	self.frame = common.frame:NewMainFrame('KintamaFrame', self)
+	self.frame = ns.frame:NewMainFrame('KintamaFrame', self)
 	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 	self.frame:SetBackdropColor(0,0,0, 0.65)
 	self.frame:SetFrameStrata('MEDIUM')
@@ -87,7 +86,7 @@ function Kintama:PrepareBagSlots(bag_id)
 		local bag_frames = {}
 
 		for bag_id=0,4 do
-			bag_frames[bag_id] = common.frame:MakeBagFrame(bag_id, self.frame)
+			bag_frames[bag_id] = ns.frame:MakeBagFrame(bag_id, self.frame)
 		end
 
 		self.bag_frames = bag_frames
@@ -318,7 +317,7 @@ function Kintama:OnDragStop(frame)
 end
 
 function Kintama:OnFrameCreate(frame)
-	frame.money_frame = common.frame:MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
+	frame.money_frame = ns.frame:MakeMoneyFrame('MoneyFrame', frame, 'PLAYER')
 	frame.money_frame:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
 
 	frame.slot_counts = frame:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
