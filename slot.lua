@@ -44,6 +44,13 @@ function ns.MakeSlotFrame(bag, slot)
 	local frame = CreateFrame("Button", name, bag, "ContainerFrameItemButtonTemplate")
 	frame:SetID(slot)
 
+	frame:ClearAllPoints()
+	if slot == 1 then
+		frame:SetPoint('LEFT', bag)
+	else
+		frame:SetPoint('LEFT', bag.slots[slot-1], 'RIGHT', 2, 0)
+	end
+
 	frame.ColorBorder = ColorBorder
 
 	return frame

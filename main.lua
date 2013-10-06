@@ -13,6 +13,7 @@ function Kintama:OnInitialize()
 
 	self.frame = ns.NewMainFrame('KintamaFrame', self)
 	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	self.frame:SetHeight(5 * 39 + self.bottom_border + self.top_border)
 	self.frame:SetBackdropColor(0,0,0, 0.65)
 	self.frame:SetFrameStrata('MEDIUM')
 
@@ -82,37 +83,19 @@ function Kintama:PrepareBagSlots(bag_id)
 end
 
 function Kintama:OrganizeBagSlots()
-	local widest_column = 0
+	local widest_column, slot_count, free_slot_count = 0, 0, 0
 
 	for bag=0,4 do
-		local num_slots = GetContainerNumSlots(bag)
-		widest_column = math.max(widest_column, num_slots)
-
-		if #ns.bags[bag].slots > num_slots then
-			for i=(num_slots+1),(#ns.bags[bag].slots) do
-				bag.slots[i]:Hide()
-			end
-		end
-
-		for slot=1,num_slots do
-			local slot_frame = ns.bags[bag].slots[slot]
-			slot_frame:ClearAllPoints()
-			slot_frame:SetPoint('TOPLEFT', self.frame:GetName(), 'TOPLEFT', self.left_border + self.column_width * (slot - 1), 0 - self.top_border - (self.row_height * bag))
-			slot_frame:SetFrameLevel(self.frame:GetFrameLevel()+20)
-			slot_frame:Show()
-		end
-	end
-
-	local slot_count, free_slot_count = 0, 0
-	for _, bag_frame in pairs(ns.bags) do
-		slot_count = slot_count + bag_frame.size
-		free_slot_count = free_slot_count + bag_frame.free_slots
+		local f = ns.bags[bag]
+		f:Update()
+		widest_column = math.max(widest_column, ns.bags[bag]:GetWidth())
+		slot_count = slot_count + f.size
+		free_slot_count = free_slot_count + f.free_slots
 	end
 
 	self.frame.slot_counts:SetFormattedText('%d/%d Slots', slot_count - free_slot_count, slot_count)
 
-	self.frame:SetHeight(5 * self.row_height + self.bottom_border + self.top_border)
-	self.frame:SetWidth(widest_column * self.column_width + self.left_border + self.right_border)
+	self.frame:SetWidth(widest_column + self.left_border + self.right_border)
 end
 
 
