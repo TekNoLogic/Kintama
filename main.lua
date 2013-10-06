@@ -15,6 +15,11 @@ function Kintama:OnInitialize()
 	self.frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 	self.frame:SetBackdropColor(0,0,0, 0.65)
 	self.frame:SetFrameStrata('MEDIUM')
+
+	for bag_id=0,4 do
+		ns.MakeBagFrame(bag_id, self.frame)
+	end
+	ns.MakeBagFrame = nil
 end
 
 function Kintama:OnEnable()
@@ -58,7 +63,7 @@ end
 local function GetSlotFrame(bag, slot)
 	local slot_key = ('%s:%s'):format(bag, slot)
 	if not Kintama.slot_frames[slot_key] then
-		Kintama.slot_frames[slot_key] = ns.MakeSlotFrame(Kintama.bag_frames[bag], slot)
+		Kintama.slot_frames[slot_key] = ns.MakeSlotFrame(ns.bags[bag], slot)
 	end
 
 	return Kintama.slot_frames[slot_key]
@@ -68,28 +73,18 @@ local function prepare_bag_slots(self, bag_id)
 	local bag_size = GetContainerNumSlots(bag_id)
 	local free_slots, bag_type = GetContainerNumFreeSlots(bag_id)
 
-	self.bag_frames[bag_id].size = bag_size
-	self.bag_frames[bag_id].free_slots = free_slots
+	ns.bags[bag_id].size = bag_size
+	ns.bags[bag_id].free_slots = free_slots
 
 	for slot_id = 1, bag_size do
 		local slot_key = ('%s:%s'):format(bag_id, slot_id)
 		if not self.slot_frames[slot_key] then
-			self.slot_frames[slot_key] = ns.MakeSlotFrame(self.bag_frames[bag_id], slot_id)
+			self.slot_frames[slot_key] = ns.MakeSlotFrame(ns.bags[bag_id], slot_id)
 		end
 	end
 end
 
 function Kintama:PrepareBagSlots(bag_id)
-	if not self.bag_frames then
-		local bag_frames = {}
-
-		for bag_id=0,4 do
-			bag_frames[bag_id] = ns.MakeBagFrame(bag_id, self.frame)
-		end
-
-		self.bag_frames = bag_frames
-	end
-
 	if not self.slot_frames then
 		self.slot_frames = {}
 	end
@@ -124,7 +119,7 @@ function Kintama:OrganizeBagSlots()
 	end
 
 	local slot_count, free_slot_count = 0, 0
-	for _, bag_frame in pairs(self.bag_frames) do
+	for _, bag_frame in pairs(ns.bags) do
 		slot_count = slot_count + bag_frame.size
 		free_slot_count = free_slot_count + bag_frame.free_slots
 	end
@@ -228,7 +223,7 @@ function Kintama:DecorateBagSlots(bag_id)
 		return
 	end
 
-	local bag_frame = self.bag_frames[bag_id]
+	local bag_frame = ns.bags[bag_id]
 	if not bag_frame or not bag_frame.size or bag_frame.size == 0 then
 		return
 	end
@@ -246,7 +241,7 @@ function Kintama:UpdateAllBags()
 	self:OrganizeBagSlots()
 	self:DecorateBagSlots()
 
-	for _, bag_frame in pairs(self.bag_frames) do
+	for _, bag_frame in pairs(ns.bags) do
 		if bag_frame.size > 0 then
 			ContainerFrame_Update(bag_frame)
 		end
@@ -255,14 +250,14 @@ end
 
 function Kintama:UpdateBags(bag_ids)
 	for bag_id, _ in pairs(bag_ids) do
-		if self.bag_frames[bag_id] then
+		if ns.bags[bag_id] then
 			self:PrepareBagSlots(bag_id)
 		end
 	end
 
 	self:OrganizeBagSlots()
 	for bag_id, _ in pairs(bag_ids) do
-		local bag_frame = self.bag_frames[bag_id]
+		local bag_frame = ns.bags[bag_id]
 		if bag_frame and bag_frame.size > 0 then
 			self:DecorateBagSlots(bag_id)
 			ContainerFrame_Update(bag_frame)
