@@ -130,46 +130,6 @@ function Kintama:OrganizeBagSlots()
 	self.frame:SetWidth(widest_column * self.column_width + self.left_border + self.right_border)
 end
 
-local colorCache = {}
-local plain = {r = .05, g = .05, b = .05}
-function Kintama:ColorSlotBorder(slot_frame, force_color)
-	local bag_frame = slot_frame:GetParent()
-	local color = force_color or plain
-
-	if not slot_frame.border then
-		-- Thanks to oglow for this method
-		local border = slot_frame:CreateTexture(nil, "OVERLAY")
-		border:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
-		border:SetBlendMode("ADD")
-		border:SetAlpha(.5)
-
-		border:SetPoint('CENTER', slot_frame, 'CENTER', 0, 1)
-		border:SetWidth(slot_frame:GetWidth() * 2 - 5)
-		border:SetHeight(slot_frame:GetHeight() * 2 - 5)
-		slot_frame.border = border
-	end
-
-	local bcolor --leaving hook for bagcolors
-
-	if not force_color and not bcolor then
-		local link = GetContainerItemLink(bag_frame:GetID(), slot_frame:GetID())
-		if link then
-			local _, _, rarity = GetItemInfo(link)
-			if rarity and rarity > 1 then
-				color = colorCache[rarity]
-				if not color then
-					local r, g, b, hex = GetItemQualityColor(rarity)
-					color = {r = r, g = g, b = b}
-					colorCache[rarity] = color
-				end
-			end
-		end
-	end
-
-	local target = slot_frame.border
-	target:SetVertexColor(color.r, color.g, color.b)
-end
-
 
 --[[************************************************************************************************
 -- Event Handlers
@@ -213,27 +173,13 @@ function Kintama:CloseBag(bag_id)
 	self.is_opened = false
 end
 
-function Kintama:DecorateBagSlots(bag_id)
-	if not bag_id then
-		for _, slot_frame in pairs(self.slot_frames) do
-			if slot_frame:IsVisible() then
-				self:ColorSlotBorder(slot_frame)
-			end
-		end
+function Kintama:DecorateBagSlots(bag)
+	if not bag then
+		for i,bag in pairs(ns.bags) do bag:ColorSlots() end
 		return
 	end
 
-	local bag_frame = ns.bags[bag_id]
-	if not bag_frame or not bag_frame.size or bag_frame.size == 0 then
-		return
-	end
-
-	for slot_id=1, bag_frame.size do
-		local slot_frame = self.slot_frames[('%d:%d'):format(bag_id, slot_id)]
-		if slot_frame:IsVisible() then
-			self:ColorSlotBorder(slot_frame)
-		end
-	end
+	ns.bags[bag]:ColorSlots()
 end
 
 function Kintama:UpdateAllBags()
