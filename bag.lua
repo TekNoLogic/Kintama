@@ -7,7 +7,7 @@ function ns.MakeBagFrame(bag, parent)
 	local frame = CreateFrame("Frame", name, parent)
 	frame:SetID(bag)
 
-	frame.slot_frames = {}
+	frame.slots = {}
 
 	return frame
 end

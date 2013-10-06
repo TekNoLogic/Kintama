@@ -2,15 +2,15 @@
 local myname, ns = ...
 
 
-function ns.MakeSlotFrame(bag_frame, slot)
-	local name = string.format('%sItem%d', bag_frame:GetName(), slot)
-	local frame = CreateFrame("Button", name, bag_frame, "ContainerFrameItemButtonTemplate")
+function ns.MakeSlotFrame(bag, slot)
+	local name = string.format('%sItem%d', bag:GetName(), slot)
+	local frame = CreateFrame("Button", name, bag, "ContainerFrameItemButtonTemplate")
 	frame:SetID(slot)
 
-	frame:SetFrameLevel(bag_frame:GetParent():GetFrameLevel()+10)
-	frame:SetFrameStrata(bag_frame:GetParent():GetFrameStrata())
+	frame:SetFrameLevel(bag:GetParent():GetFrameLevel()+10)
+	frame:SetFrameStrata(bag:GetParent():GetFrameStrata())
 
-	bag_frame.slot_frames[slot] = frame
+	bag.slots[slot] = frame
 
 	return frame
 end
