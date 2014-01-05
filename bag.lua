@@ -43,9 +43,12 @@ local function OnShow(self)
 	self:RegisterEvent('BAG_UPDATE')
 	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
 	self:RegisterEvent('UPDATE_INVENTORY_ALERTS')
+	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 end
 local function OnEvent(self, event, bag, ...)
 	if event == 'BAG_UPDATE' and bag ~= self.id then return end
+	if event == "PLAYERBANKSLOTS_CHANGED" and
+		 (self.id ~= BANK_CONTAINER or bag > NUM_BANKGENERIC_SLOTS) then return end
 	self:Update()
 end
 
