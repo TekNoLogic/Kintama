@@ -5,7 +5,9 @@
 local myname, ns = ...
 
 
-local function Update(self) PaperDollItemSlotButton_Update(self) end
+local function Update(self)
+	PaperDollItemSlotButton_Update(self)
+end
 local function OnClick(self)
 	if self.owned ~= false then
 		PutItemInBag(self.id)
@@ -20,6 +22,7 @@ end
 
 
 ns.bagslots = {}
+local _, texture = GetInventorySlotInfo("Bag1Slot")
 function ns.MakeBagSlotFrame(bag, parent)
 	local name = parent:GetName()..'Slot'
 	local frame = CreateFrame('CheckButton', name, parent:GetParent(), 'ItemButtonTemplate')
@@ -28,30 +31,35 @@ function ns.MakeBagSlotFrame(bag, parent)
 
 	frame:RegisterForDrag("LeftButton")
 
-	local id, texture
-	if bag <= NUM_BAG_SLOTS then
-		id, texture = GetInventorySlotInfo("Bag"..(bag-1).."Slot")
+	frame:SetScript('OnLeave', OnLeave)
+	frame:SetScript('OnClick', OnClick)
+	frame:SetScript('OnDragStart', BagSlotButton_OnDrag)
+	frame:SetScript('OnReceiveDrag', OnClick)
+	frame:SetScript('OnShow', PaperDollItemSlotButton_OnShow)
+	frame:SetScript('OnHide', PaperDollItemSlotButton_OnHide)
+
+	if bag > NUM_BAG_SLOTS then
+		frame.GetInventorySlot = ButtonInventorySlot
+		frame.UpdateTooltip = BankFrameItemButton_OnEnter
+		frame:SetScript('OnEnter', BankFrameItemButton_OnEnter)
+		frame:SetScript('OnEvent', BankFrameBagButton_OnEvent)
+
+		frame.id = BankButtonIDToInvSlotID(bag, 1)
 	else
-		id, texture = BankButtonIDToInvSlotID(bag, 1)
+		frame.UpdateTooltip = BagSlotButton_OnEnter
+		frame:SetScript('OnEnter', BagSlotButton_OnEnter)
+		frame:SetScript('OnEvent', PaperDollItemSlotButton_OnEvent)
+
+		frame.id = GetInventorySlotInfo("Bag"..(bag-1).."Slot")
 	end
+
 	frame.isBag = true
-	frame.id = id
-	frame:SetID(id)
+	frame:SetID(frame.id)
 
 	frame.icon:SetTexture(texture)
 	frame.backgroundTextureName = texture
 
-	frame.UpdateTooltip = BagSlotButton_OnEnter
 	frame.Update = Update
-
-	frame:SetScript('OnEnter', BagSlotButton_OnEnter)
-	frame:SetScript('OnLeave', OnLeave)
-	frame:SetScript('OnDragStart', BagSlotButton_OnDrag)
-	frame:SetScript('OnReceiveDrag', OnClick)
-	frame:SetScript('OnClick', OnClick)
-	frame:SetScript('OnShow', PaperDollItemSlotButton_OnShow)
-	frame:SetScript('OnHide', PaperDollItemSlotButton_OnHide)
-	frame:SetScript('OnEvent', PaperDollItemSlotButton_OnEvent)
 
 	ns.bagslots[bag] = frame
 	parent.bagslot = frame
