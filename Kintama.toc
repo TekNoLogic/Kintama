@@ -9,8 +9,7 @@
 externals\events.lua
 
 main.lua
-bagframe.lua
-bankframe.lua
+container.lua
 bagslot.lua
 bag.lua
 slot.lua

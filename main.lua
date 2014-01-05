@@ -2,38 +2,67 @@
 local myname, ns = ...
 
 
+local bagframe, bankframe
 function ns.OnLoad()
-	ns.MakeBagFrame(BACKPACK_CONTAINER, ns.bagframe)
-	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, ns.bagframe) end
+	bagframe = ns.MakeContainerFrame("KintamaFrame", UIParent)
+	bagframe:SetSize(400, 236)
+	bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 
-	ns.MakeBagFrame(BANK_CONTAINER, ns.bankframe)
+	bankframe = ns.MakeContainerFrame("KintamaBankFrame", bagframe)
+	bankframe:SetSize(400, 342)
+	bankframe:SetPoint("BOTTOMRIGHT", bagframe, "TOPRIGHT")
+
+	ns.MakeBagFrame(BACKPACK_CONTAINER, bagframe)
+	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, bagframe) end
+
+	ns.MakeBagFrame(BANK_CONTAINER, bankframe)
 	for bag_id=(NUM_BAG_SLOTS+1),(NUM_BAG_SLOTS+NUM_BANKBAGSLOTS) do
-		ns.MakeBagFrame(bag_id, ns.bankframe)
+		ns.MakeBagFrame(bag_id, bankframe)
 	end
 
+	local money = CreateFrame("Frame", "KintamaFrameMoneyFrame", bagframe, 'SmallMoneyFrameTemplate')
+	money:SetPoint('BOTTOMRIGHT', bagframe, 'BOTTOMRIGHT', 5, 7)
+	SmallMoneyFrame_OnLoad(money, 'PLAYER')
+
+	BagItemSearchBox:Hide()
+	BagItemSearchBox.Show = BagItemSearchBox.Hide
+
+	ns.MakeContainerFrame = nil
 	ns.MakeBagFrame = nil
 	ns.MakeBagSlotFrame = nil
 end
 
 
 function ns.OnLogin()
-	ns.bagframe:Hide()
-	ns.bankframe:Hide()
+	local function open() bagframe:Show() end
+	local function close() bagframe:Hide() end
+	local function toggle()
+		if bagframe:IsVisible() then bagframe:Hide() else bagframe:Show() end
+	end
+
+	ToggleBag = toggle
+	ToggleBackpack = toggle
+	ToggleAllBags = toggle
+	OpenBag = open
+	CloseBag = close
 
 	ns.RegisterEvent("BAG_UPDATE_DELAYED")
 	ns.RegisterEvent("BANKFRAME_OPENED")
 	ns.RegisterEvent("BANKFRAME_CLOSED")
 
-	ns.RegisterEvent("AUCTION_HOUSE_SHOW", ns.open)
-	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", ns.close)
-	ns.RegisterEvent("MAIL_SHOW", ns.open)
-	ns.RegisterEvent("MAIL_CLOSED", ns.close)
-	ns.RegisterEvent("MERCHANT_SHOW", ns.open)
-	ns.RegisterEvent("MERCHANT_CLOSED", ns.close)
-	ns.RegisterEvent("TRADE_SHOW", ns.open)
-	ns.RegisterEvent("TRADE_CLOSED", ns.close)
-	ns.RegisterEvent("GUILDBANKFRAME_OPENED", ns.open)
-	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", ns.close)
+	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
+	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
+	ns.RegisterEvent("MAIL_SHOW", open)
+	ns.RegisterEvent("MAIL_CLOSED", close)
+	ns.RegisterEvent("MERCHANT_SHOW", open)
+	ns.RegisterEvent("MERCHANT_CLOSED", close)
+	ns.RegisterEvent("TRADE_SHOW", open)
+	ns.RegisterEvent("TRADE_CLOSED", close)
+	ns.RegisterEvent("GUILDBANKFRAME_OPENED", open)
+	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", close)
+
+	bagframe:Hide()
+	bankframe:Hide()
 
 	-- noop the default bank so it doesn't show
 	BankFrame:SetScript("OnEvent", function() end)
@@ -41,29 +70,15 @@ end
 
 
 function ns.BANKFRAME_OPENED()
-	ns.bagframe:Show()
-	ns.bankframe:Show()
+	bagframe:Show()
+	bankframe:Show()
 end
 
 
 function ns.BANKFRAME_CLOSED()
-	ns.bagframe:Hide()
-	ns.bankframe:Hide()
+	bagframe:Hide()
+	bankframe:Hide()
 end
-
-
-function ns.open() ns.bagframe:Show() end
-function ns.close() ns.bagframe:Hide() end
-function ns.toggle()
-	if ns.bagframe:IsVisible() then ns.bagframe:Hide() else ns.bagframe:Show() end
-end
-
-
-ToggleBag = ns.toggle
-ToggleBackpack = ns.toggle
-ToggleAllBags = ns.toggle
-OpenBag = ns.open
-CloseBag = ns.close
 
 
 local bagstates = {}

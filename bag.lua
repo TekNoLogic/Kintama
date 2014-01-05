@@ -68,7 +68,7 @@ function ns.MakeBagFrame(bag, parent)
 	frame:SetScript('OnShow', OnShow)
 	frame:SetScript('OnHide', OnHide)
 	frame:SetScript('OnEvent', OnEvent)
-	frame:SetScript('OnSizeChanged', parent.ResizeFrame)
+	frame:SetScript('OnSizeChanged', function() parent:ResizeFrame() end)
 
 	frame.Update = Update
 	frame.ColorSlots = ColorSlots
@@ -86,6 +86,7 @@ function ns.MakeBagFrame(bag, parent)
 	end
 
 	ns.bags[bag] = frame
+	parent.bags[bag] = frame
 
 	return frame
 end
