@@ -13,6 +13,7 @@ local function OnLeave()
 end
 
 
+ns.bagslots = {}
 function ns.MakeBagSlotFrame(bag, parent)
 	local name = parent:GetName()..'Slot'
 	local frame = CreateFrame('CheckButton', name, parent:GetParent(), 'ItemButtonTemplate')
@@ -46,5 +47,6 @@ function ns.MakeBagSlotFrame(bag, parent)
 	frame:SetScript('OnHide', PaperDollItemSlotButton_OnHide)
 	frame:SetScript('OnEvent', PaperDollItemSlotButton_OnEvent)
 
+	ns.bagslots[bag] = frame
 	parent.bagslot = frame
 end

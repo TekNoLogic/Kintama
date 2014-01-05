@@ -68,9 +68,8 @@ CloseBag = ns.close
 
 local bagstates = {}
 function ns.BAG_UPDATE_DELAYED(...)
-	for bag=1,(NUM_BAG_SLOTS+NUM_BANKBAGSLOTS) do
-		local id = ns.bags[bag].bagslot.id
-		local link = GetInventoryItemLink("player", id)
+	for bag,bagslot in pairs(ns.bagslots) do
+		local link = GetInventoryItemLink("player", bagslot.id)
 		if bagstates[bag] ~= link then
 			ns.bags[bag]:Update()
 			ns.bags[bag].bagslot:Update()
