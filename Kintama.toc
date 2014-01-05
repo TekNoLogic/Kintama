@@ -6,11 +6,11 @@
 ## Version: Alpha
 ## X-Website: http://tekkub.net/
 
-## OptionalDeps: Ace3
-
 externals\events.lua
 
 main.lua
+bagframe.lua
+bankframe.lua
 bagslot.lua
 bag.lua
 slot.lua

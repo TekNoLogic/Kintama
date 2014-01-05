@@ -57,8 +57,10 @@ function ns.MakeBagFrame(bag, parent)
 	frame:SetID(bag)
 
 	frame:SetHeight(39)
-	if bag == 0 then
+	if bag == BACKPACK_CONTAINER or bag == BANK_CONTAINER then
 		frame:SetPoint('TOPLEFT', parent, 8, -8)
+	elseif bag == (NUM_BAG_SLOTS + 1) then
+		frame:SetPoint('TOPLEFT', ns.bags[BANK_CONTAINER], 'BOTTOMLEFT', 0, -2)
 	else
 		frame:SetPoint('TOPLEFT', ns.bags[bag-1], 'BOTTOMLEFT', 0, -2)
 	end
@@ -66,7 +68,7 @@ function ns.MakeBagFrame(bag, parent)
 	frame:SetScript('OnShow', OnShow)
 	frame:SetScript('OnHide', OnHide)
 	frame:SetScript('OnEvent', OnEvent)
-	frame:SetScript('OnSizeChanged', ns.ResizeFrame)
+	frame:SetScript('OnSizeChanged', parent.ResizeFrame)
 
 	frame.Update = Update
 	frame.ColorSlots = ColorSlots
@@ -79,7 +81,7 @@ function ns.MakeBagFrame(bag, parent)
 		end
 	})
 
-	if bag ~= 0 then
+	if bag ~= BACKPACK_CONTAINER and bag ~= BANK_CONTAINER then
 		ns.MakeBagSlotFrame(bag, frame)
 	end
 

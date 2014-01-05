@@ -2,99 +2,79 @@
 local myname, ns = ...
 
 
-local TOP_BORDER = 8
-local BOTTOM_BORDER = 24
-local RIGHT_BORDER = 5
-local LEFT_BORDER = 8
-
-
-local frame = CreateFrame("Frame", 'KintamaFrame', UIParent)
-frame:Hide()
-frame:SetToplevel(true)
-frame:EnableMouse(true)
-frame:SetSize(400, 236)
-frame:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-frame:SetFrameStrata('MEDIUM')
-
-
-frame:SetBackdrop({
-	bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
-	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-	tile = true, tileSize = 16, edgeSize = 16,
-	insets = {left = 5, right = 5, top = 5, bottom = 5},
-})
-frame:SetBackdropColor(0,0,0, 0.65)
-
-
-local function open() frame:Show() end
-local function close() frame:Hide() end
-local function toggle()
-	if frame:IsVisible() then frame:Hide() else frame:Show() end
-end
-
-
-ToggleBag = toggle
-ToggleBackpack = toggle
-ToggleAllBags = toggle
-OpenBag = open
-CloseBag = close
-
-
-table.insert(UISpecialFrames, frame:GetName())
-
-
-local money = CreateFrame('Frame', frame:GetName()..'MoneyFrame', frame, 'SmallMoneyFrameTemplate')
-money:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 5, 7)
-SmallMoneyFrame_OnLoad(money, 'PLAYER')
-
-
-BagItemSearchBox:Hide()
-BagItemSearchBox.Show = BagItemSearchBox.Hide
-
-
 function ns.OnLoad()
-	for bag_id=0,4 do ns.MakeBagFrame(bag_id, frame) end
+	ns.MakeBagFrame(BACKPACK_CONTAINER, ns.bagframe)
+	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, ns.bagframe) end
+
+	ns.MakeBagFrame(BANK_CONTAINER, ns.bankframe)
+	for bag_id=(NUM_BAG_SLOTS+1),(NUM_BAG_SLOTS+NUM_BANKBAGSLOTS) do
+		ns.MakeBagFrame(bag_id, ns.bankframe)
+	end
+
 	ns.MakeBagFrame = nil
+	ns.MakeBagSlotFrame = nil
 end
 
 
 function ns.OnLogin()
+	ns.bagframe:Hide()
+	ns.bankframe:Hide()
+
 	ns.RegisterEvent("BAG_UPDATE_DELAYED")
-	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
-	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
-	ns.RegisterEvent("BANKFRAME_OPENED", open)
-	ns.RegisterEvent("BANKFRAME_CLOSED", close)
-	ns.RegisterEvent("MAIL_SHOW", open)
-	ns.RegisterEvent("MAIL_CLOSED", close)
-	ns.RegisterEvent("MERCHANT_SHOW", open)
-	ns.RegisterEvent("MERCHANT_CLOSED", close)
-	ns.RegisterEvent("TRADE_SHOW", open)
-	ns.RegisterEvent("TRADE_CLOSED", close)
-	ns.RegisterEvent("GUILDBANKFRAME_OPENED", open)
-	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", close)
+	ns.RegisterEvent("BANKFRAME_OPENED")
+	ns.RegisterEvent("BANKFRAME_CLOSED")
+
+	ns.RegisterEvent("AUCTION_HOUSE_SHOW", ns.open)
+	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", ns.close)
+	ns.RegisterEvent("MAIL_SHOW", ns.open)
+	ns.RegisterEvent("MAIL_CLOSED", ns.close)
+	ns.RegisterEvent("MERCHANT_SHOW", ns.open)
+	ns.RegisterEvent("MERCHANT_CLOSED", ns.close)
+	ns.RegisterEvent("TRADE_SHOW", ns.open)
+	ns.RegisterEvent("TRADE_CLOSED", ns.close)
+	ns.RegisterEvent("GUILDBANKFRAME_OPENED", ns.open)
+	ns.RegisterEvent("GUILDBANKFRAME_CLOSED", ns.close)
+
+	-- noop the default bank so it doesn't show
+	BankFrame:SetScript("OnEvent", function() end)
 end
 
 
-local bagids, bagstates = {}, {}
-for bag=1,4 do bagids[bag] = GetInventorySlotInfo("Bag"..(bag-1).."Slot") end
-function ns.BAG_UPDATE_DELAYED()
-	for bag=1,4 do
-		local link = GetInventoryItemLink("player", bagids[bag])
+function ns.BANKFRAME_OPENED()
+	ns.bagframe:Show()
+	ns.bankframe:Show()
+end
+
+
+function ns.BANKFRAME_CLOSED()
+	ns.bagframe:Hide()
+	ns.bankframe:Hide()
+end
+
+
+function ns.open() ns.bagframe:Show() end
+function ns.close() ns.bagframe:Hide() end
+function ns.toggle()
+	if ns.bagframe:IsVisible() then ns.bagframe:Hide() else ns.bagframe:Show() end
+end
+
+
+ToggleBag = ns.toggle
+ToggleBackpack = ns.toggle
+ToggleAllBags = ns.toggle
+OpenBag = ns.open
+CloseBag = ns.close
+
+
+local bagstates = {}
+function ns.BAG_UPDATE_DELAYED(...)
+	for bag=1,(NUM_BAG_SLOTS+NUM_BANKBAGSLOTS) do
+		local id = ns.bags[bag].bagslot.id
+		local link = GetInventoryItemLink("player", id)
 		if bagstates[bag] ~= link then
 			ns.bags[bag]:Update()
 			ns.bags[bag].bagslot:Update()
 		end
 		bagstates[bag] = link
 	end
-end
-
-
-function ns.ResizeFrame()
-	local widest_column = 0
-
-	for bag=0,4 do
-		widest_column = math.max(widest_column, ns.bags[bag]:GetWidth())
-	end
-
-	frame:SetWidth(widest_column + LEFT_BORDER + RIGHT_BORDER)
 end

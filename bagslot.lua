@@ -1,4 +1,7 @@
 
+-- Bagslots are the special slots where the actual bag item is held.
+-- They're not slots within a bag.
+
 local myname, ns = ...
 
 
@@ -18,7 +21,12 @@ function ns.MakeBagSlotFrame(bag, parent)
 
 	frame:RegisterForDrag("LeftButton")
 
-	local id, texture = GetInventorySlotInfo("Bag"..(bag-1).."Slot")
+	local id, texture
+	if bag <= NUM_BAG_SLOTS then
+		id, texture = GetInventorySlotInfo("Bag"..(bag-1).."Slot")
+	else
+		id, texture = BankButtonIDToInvSlotID(bag, 1)
+	end
 	frame.isBag = true
 	frame.id = id
 	frame:SetID(id)
