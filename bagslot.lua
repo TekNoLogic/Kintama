@@ -5,6 +5,8 @@
 local myname, ns = ...
 
 
+local function GetInventorySlot(self) return self.id end
+
 local function Update(self)
 	PaperDollItemSlotButton_Update(self)
 
@@ -15,6 +17,7 @@ local function Update(self)
 		self.border:Hide()
 	end
 end
+
 local function OnClick(self)
 	if self.owned ~= false then
 		PutItemInBag(self.id)
@@ -22,6 +25,7 @@ local function OnClick(self)
 		StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
 	end
 end
+
 local function OnLeave()
 	GameTooltip:Hide()
 	ResetCursor()
@@ -46,7 +50,7 @@ function ns.MakeBagSlotFrame(bag, parent)
 	frame:SetScript('OnHide', PaperDollItemSlotButton_OnHide)
 
 	if bag > NUM_BAG_SLOTS then
-		frame.GetInventorySlot = ButtonInventorySlot
+		frame.GetInventorySlot = GetInventorySlot
 		frame.UpdateTooltip = BankFrameItemButton_OnEnter
 		frame:SetScript('OnEnter', BankFrameItemButton_OnEnter)
 		frame:SetScript('OnEvent', BankFrameBagButton_OnEvent)
