@@ -64,6 +64,8 @@ function ns.OnLogin()
 	bagframe:Hide()
 	bankframe:Hide()
 
+	bankframe:SetScript("OnHide", CloseBankFrame)
+
 	-- noop the default bank so it doesn't show
 	BankFrame:SetScript("OnEvent", function() end)
 end
