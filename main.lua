@@ -50,6 +50,9 @@ function ns.OnLogin()
 	ns.RegisterEvent("BANKFRAME_OPENED")
 	ns.RegisterEvent("BANKFRAME_CLOSED")
 
+	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
+	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
+
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
 	ns.RegisterEvent("MAIL_SHOW", open)
@@ -74,6 +77,7 @@ end
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
+	ns.UpdateBankBagslots()
 end
 
 
@@ -92,5 +96,25 @@ function ns.BAG_UPDATE_DELAYED(...)
 			ns.bags[bag].bagslot:Update()
 		end
 		bagstates[bag] = link
+	end
+end
+
+
+function ns.UpdateBankBagslots()
+	local numowned = GetNumBankSlots()
+	BankFrame.nextSlotCost = GetBankSlotCost(numSlots)
+
+	for bag,frame in pairs(bankframe.bags) do
+		if bag ~= BANK_CONTAINER then
+			if (bag-NUM_BAG_SLOTS) <= numowned then
+				SetItemButtonTextureVertexColor(frame.bagslot, 1,1,1)
+				frame.bagslot.tooltipText = BANK_BAG
+				frame.bagslot.owned = true
+			else
+				SetItemButtonTextureVertexColor(frame.bagslot, 1,0.1,0.1)
+				frame.bagslot.tooltipText = BANK_BAG_PURCHASE
+				frame.bagslot.owned = false
+			end
+		end
 	end
 end

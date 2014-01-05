@@ -6,7 +6,13 @@ local myname, ns = ...
 
 
 local function Update(self) PaperDollItemSlotButton_Update(self) end
-local function OnClick(self) PutItemInBag(self.id) end
+local function OnClick(self)
+	if self.owned ~= false then
+		PutItemInBag(self.id)
+	else
+		StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+	end
+end
 local function OnLeave()
 	GameTooltip:Hide()
 	ResetCursor()
