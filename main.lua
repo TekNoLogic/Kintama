@@ -77,6 +77,7 @@ end
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
+	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
 
