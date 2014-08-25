@@ -10,7 +10,8 @@ local function ColorSlots(self)
 end
 
 
-local SORT_WIDTH = BagItemAutoSortButton:GetWidth()
+local SORT_WIDTH
+if BagItemAutoSortButton then BagItemAutoSortButton:GetWidth() end
 local SORT_OFFSET = 10
 local function Update(self)
 	local num_slots = GetContainerNumSlots(self.id)
@@ -23,7 +24,9 @@ local function Update(self)
 	end
 
 	local width = num_slots * 39 + 42
-	if self.id == 0 then width = width + SORT_WIDTH + SORT_OFFSET end
+	if self.id == 0 and BagItemAutoSortButton then
+		width = width + SORT_WIDTH + SORT_OFFSET
+	end
 	self:SetWidth(width)
 
 	local f = self.slots[num_slots] -- Touch to ensure slot frames exist
@@ -39,7 +42,7 @@ local function Update(self)
 	self:ColorSlots()
 	ContainerFrame_Update(self)
 
-	if self.id == 0 then
+	if self.id == 0 and BagItemAutoSortButton then
 		BagItemAutoSortButton:ClearAllPoints()
 		BagItemAutoSortButton:SetPoint("TOPLEFT", self, "TOPRIGHT", SORT_OFFSET, 0)
 	end
