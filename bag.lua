@@ -11,7 +11,7 @@ end
 
 
 local SORT_WIDTH
-if BagItemAutoSortButton then BagItemAutoSortButton:GetWidth() end
+if BagItemAutoSortButton then SORT_WIDTH = BagItemAutoSortButton:GetWidth() end
 local SORT_OFFSET = 10
 local function Update(self)
 	local num_slots = GetContainerNumSlots(self.id)
