@@ -27,10 +27,15 @@ end
 
 
 function ns.MakeSlotFrame(bag, slot)
-	local name = string.format('%sItem%d', bag:GetName(), slot)
-	local frame = CreateFrame("Button", name, bag, "ContainerFrameItemButtonTemplate")
-	frame.id = slot
-	frame:SetID(slot)
+	local slotid = bag.isReagentBank
+	               and ((bag.reagentBankColumn - 1) * ns.NUM_REAGENT_SLOTS + slot)
+	               or slot
+	local template = bag.isReagentBank and "ReagentBankItemButtonGenericTemplate"
+	                                    or "ContainerFrameItemButtonTemplate"
+	local name = string.format('%sItem%d', bag:GetName(), slotid)
+	local frame = CreateFrame("Button", name, bag, template)
+	frame.id = slotid
+	frame:SetID(slotid)
 
 	frame:ClearAllPoints()
 	if slot == 1 then

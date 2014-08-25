@@ -12,6 +12,9 @@ end
 
 local function Update(self)
 	local num_slots = GetContainerNumSlots(self.id)
+	if self.isReagentBank then
+		num_slots = ns.NUM_REAGENT_SLOTS
+	end
 	self.size = num_slots
 
 	if num_slots == 0 then
@@ -33,7 +36,13 @@ local function Update(self)
 	end
 
 	self:ColorSlots()
-	ContainerFrame_Update(self)
+	if self.isReagentBank then
+		for _,slot in pairs(self.slots) do
+			BankFrameItemButton_Update(slot)
+		end
+	else
+		ContainerFrame_Update(self)
+	end
 
 	if self.id == 0 and BagItemAutoSortButton then
 		BagItemAutoSortButton:ClearAllPoints()
@@ -58,19 +67,34 @@ local function OnEvent(self, event, bag, ...)
 end
 
 
-function ns.MakeBagFrame(bag, parent)
+function ns.MakeBagFrame(bag, parent, reagentbank)
+	local bagid = reagentbank and REAGENTBANK_CONTAINER or bag
+	local bagindex = reagentbank and bag > 0
+	                 and (bag + NUM_BAG_SLOTS + NUM_BANKBAGSLOTS)
+	                 or bag
 	local name = string.format('%sBag%d', parent:GetName(), bag)
 	local frame = CreateFrame("Frame", name, parent)
-	frame.id = bag
-	frame:SetID(bag)
+	frame.id = bagid
+	if reagentbank then
+		frame.isReagentBank = true
+		frame.reagentBankColumn = bag == REAGENTBANK_CONTAINER and 1 or bag
+	end
+	frame:SetID(bagid)
 
 	frame:SetHeight(39)
-	if bag == BACKPACK_CONTAINER or bag == BANK_CONTAINER then
+	if reagentbank and bag == REAGENTBANK_CONTAINER or bag == BACKPACK_CONTAINER or
+	   bag == BANK_CONTAINER then
 		frame:SetPoint('TOPLEFT', parent, 8, -8)
-	elseif bag == (NUM_BAG_SLOTS + 1) then
-		frame:SetPoint('TOPLEFT', ns.bags[BANK_CONTAINER], 'BOTTOMLEFT', 0, -2)
 	else
-		frame:SetPoint('TOPLEFT', ns.bags[bag-1], 'BOTTOMLEFT', 0, -2)
+		local anchor
+		if reagentbank and bag == 2 then
+			anchor = ns.bags[REAGENTBANK_CONTAINER]
+		elseif bag == (NUM_BAG_SLOTS + 1) and not reagentbank then
+			anchor = ns.bags[BANK_CONTAINER]
+		else
+		  anchor = ns.bags[bagindex-1]
+		end
+		frame:SetPoint('TOPLEFT', anchor, 'BOTTOMLEFT', 0, -2)
 	end
 
 	frame:SetScript('OnShow', OnShow)
@@ -89,14 +113,14 @@ function ns.MakeBagFrame(bag, parent)
 		end
 	})
 
-	if bag ~= BACKPACK_CONTAINER and bag ~= BANK_CONTAINER then
+	if bag ~= BACKPACK_CONTAINER and bag ~= BANK_CONTAINER and not reagentbank then
 		ns.MakeBagSlotFrame(bag, frame)
 	end
 
 	frame.FilterIcon = CreateFrame("Button", nil, frame)
 
-	ns.bags[bag] = frame
-	parent.bags[bag] = frame
+	ns.bags[bagindex] = frame
+	parent.bags[bagindex] = frame
 
 	return frame
 end

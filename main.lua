@@ -1,8 +1,10 @@
 
 local myname, ns = ...
 
+ns.NUM_REAGENT_SLOTS = 7
 
-local bagframe, bankframe
+
+local bagframe, bankframe, reagentframe
 function ns.OnLoad()
 	bagframe = ns.MakeContainerFrame("KintamaFrame", UIParent)
 	bagframe:SetSize(400, 236)
@@ -12,6 +14,13 @@ function ns.OnLoad()
 	bankframe:SetSize(400, 342)
 	bankframe:SetPoint("BOTTOMRIGHT", bagframe, "TOPRIGHT")
 
+	reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
+	reagentframe:SetSize(400, 587)
+	reagentframe:SetPoint("TOPRIGHT", bankframe, "TOPLEFT")
+	-- reagentframe:SetPoint("BOTTOMRIGHT", bagframe, "TOPRIGHT")
+	-- reagentframe:SetAllPoints(bankframe)
+	-- reagentframe.bags = {}
+
 	ns.MakeBagFrame(BACKPACK_CONTAINER, bagframe)
 	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, bagframe) end
 
@@ -19,6 +28,13 @@ function ns.OnLoad()
 	for bag_id=(NUM_BAG_SLOTS+1),(NUM_BAG_SLOTS+NUM_BANKBAGSLOTS) do
 		ns.MakeBagFrame(bag_id, bankframe)
 	end
+
+	ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
+	for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
+		ns.MakeBagFrame(column_id, reagentframe, true)
+	end
+
+	-- IsReagentBankUnlocked
 
 	local money = CreateFrame("Frame", "KintamaFrameMoneyFrame", bagframe, 'SmallMoneyFrameTemplate')
 	money:SetPoint('BOTTOMRIGHT', bagframe, 'BOTTOMRIGHT', 5, 7)
@@ -52,6 +68,7 @@ function ns.OnLogin()
 
 	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
+	ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
 
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
@@ -77,6 +94,7 @@ end
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
+	reagentframe:Show()
 	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
@@ -85,6 +103,7 @@ end
 function ns.BANKFRAME_CLOSED()
 	bagframe:Hide()
 	bankframe:Hide()
+	reagentframe:Hide()
 end
 
 
@@ -117,5 +136,11 @@ function ns.UpdateBankBagslots()
 				frame.bagslot.owned = false
 			end
 		end
+	end
+end
+
+function ns.UpdateReagentBankBagslots()
+	for _,bag in pairs(reagentframe.bags) do
+		bag:Update()
 	end
 end
