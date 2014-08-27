@@ -1,7 +1,7 @@
 
 local myname, ns = ...
 
-ns.NUM_REAGENT_SLOTS = 7
+ns.NUM_REAGENT_SLOTS = 14
 
 
 local bagframe, bankframe, reagentframe
@@ -24,8 +24,8 @@ function ns.OnLoad()
 
 	if ns.isWOD then
 		reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
-		reagentframe:SetSize(400, 587)
-		reagentframe:SetPoint("TOPRIGHT", bankframe, "TOPLEFT")
+		reagentframe:SetSize(400, 300)
+		reagentframe:SetPoint("BOTTOMRIGHT", bankframe, "TOPRIGHT")
 
 		ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
 		for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
@@ -95,7 +95,10 @@ end
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
-	if ns.isWOD then reagentframe:Show() end
+	if ns.isWOD then
+		reagentframe:Show()
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
+	end
 	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
@@ -104,7 +107,10 @@ end
 function ns.BANKFRAME_CLOSED()
 	bagframe:Hide()
 	bankframe:Hide()
-	if ns.isWOD then reagentframe:Hide() end
+	if ns.isWOD then
+		reagentframe:Hide()
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	end
 end
 
 
