@@ -68,22 +68,28 @@ end
 
 
 function ns.MakeBagFrame(bag, parent, reagentbank)
-	local bagid = reagentbank and REAGENTBANK_CONTAINER or bag
-	local bagindex = reagentbank and bag > 0
-	                 and (bag + NUM_BAG_SLOTS + NUM_BANKBAGSLOTS)
-	                 or bag
+	local bagid = bag
+	local bagindex = bag
+	if reagentbank then
+		bagid = REAGENTBANK_CONTAINER
+		if bag > 0 then
+			bagindex = bag + NUM_BAG_SLOTS + NUM_BANKBAGSLOTS
+		end
+	end
+
 	local name = string.format('%sBag%d', parent:GetName(), bag)
 	local frame = CreateFrame("Frame", name, parent)
-	frame.id = bagid
 	if reagentbank then
 		frame.isReagentBank = true
 		frame.reagentBankColumn = bag == REAGENTBANK_CONTAINER and 1 or bag
 	end
+	frame.id = bagid
 	frame:SetID(bagid)
 
 	frame:SetHeight(39)
-	if reagentbank and bag == REAGENTBANK_CONTAINER or bag == BACKPACK_CONTAINER or
-	   bag == BANK_CONTAINER then
+	if reagentbank and bag == REAGENTBANK_CONTAINER
+	   or bag == BACKPACK_CONTAINER
+		 or bag == BANK_CONTAINER then
 		frame:SetPoint('TOPLEFT', parent, 8, -8)
 	else
 		local anchor

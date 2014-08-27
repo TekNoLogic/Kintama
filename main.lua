@@ -14,10 +14,6 @@ function ns.OnLoad()
 	bankframe:SetSize(400, 342)
 	bankframe:SetPoint("BOTTOMRIGHT", bagframe, "TOPRIGHT")
 
-	reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
-	reagentframe:SetSize(400, 587)
-	reagentframe:SetPoint("TOPRIGHT", bankframe, "TOPLEFT")
-
 	ns.MakeBagFrame(BACKPACK_CONTAINER, bagframe)
 	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, bagframe) end
 
@@ -26,9 +22,15 @@ function ns.OnLoad()
 		ns.MakeBagFrame(bag_id, bankframe)
 	end
 
-	ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
-	for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
-		ns.MakeBagFrame(column_id, reagentframe, true)
+	if ns.isWOD then
+		reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
+		reagentframe:SetSize(400, 587)
+		reagentframe:SetPoint("TOPRIGHT", bankframe, "TOPLEFT")
+
+		ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
+		for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
+			ns.MakeBagFrame(column_id, reagentframe, true)
+		end
 	end
 
 	-- IsReagentBankUnlocked
@@ -65,7 +67,9 @@ function ns.OnLogin()
 
 	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
-	ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
+	if ns.isWOD then
+		ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
+	end
 
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
@@ -91,7 +95,7 @@ end
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
-	reagentframe:Show()
+	if ns.isWOD then reagentframe:Show() end
 	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
@@ -100,7 +104,7 @@ end
 function ns.BANKFRAME_CLOSED()
 	bagframe:Hide()
 	bankframe:Hide()
-	reagentframe:Hide()
+	if ns.isWOD then reagentframe:Hide() end
 end
 
 
@@ -136,8 +140,10 @@ function ns.UpdateBankBagslots()
 	end
 end
 
-function ns.UpdateReagentBankBagslots()
-	for _,bag in pairs(reagentframe.bags) do
-		bag:Update()
+if ns.isWOD then
+	function ns.UpdateReagentBankBagslots()
+		for _,bag in pairs(reagentframe.bags) do
+			bag:Update()
+		end
 	end
 end

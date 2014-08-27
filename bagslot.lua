@@ -55,7 +55,9 @@ function ns.MakeBagSlotFrame(bag, parent)
 		frame:SetScript('OnEnter', BankFrameItemButton_OnEnter)
 		frame:SetScript('OnEvent', BankFrameBagButton_OnEvent)
 
-		frame.id = BankButtonIDToInvSlotID(bag-NUM_BAG_SLOTS, 1)
+		local bagid = bag
+		if ns.isWOD then bagid = bag - NUM_BAG_SLOTS end
+		frame.id = BankButtonIDToInvSlotID(bagid, 1)
 	else
 		frame.UpdateTooltip = BagSlotButton_OnEnter
 		frame:SetScript('OnEnter', BagSlotButton_OnEnter)
