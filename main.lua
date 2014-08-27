@@ -65,11 +65,11 @@ function ns.OnLogin()
 	ns.RegisterEvent("BAG_UPDATE_DELAYED")
 	ns.RegisterEvent("BANKFRAME_OPENED")
 	ns.RegisterEvent("BANKFRAME_CLOSED")
-	ns.RegisterEvent("REAGENTBANK_PURCHASED")
 
 	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
 	if ns.isWOD then
+		ns.RegisterEvent("REAGENTBANK_PURCHASED")
 		ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
 	end
 
@@ -116,14 +116,6 @@ function ns.BANKFRAME_CLOSED()
 end
 
 
-function ns.REAGENTBANK_PURCHASED()
-	IsReagentBankUnlocked = function() return true end
-	ReagentBankFrameUnlockInfo:Hide()
-	reagentframe:SetSize(400, 300)
-	ns.UpdateReagentBankBagslots()
-end
-
-
 local bagstates = {}
 function ns.BAG_UPDATE_DELAYED(...)
 	for bag,bagslot in pairs(ns.bagslots) do
@@ -157,6 +149,14 @@ function ns.UpdateBankBagslots()
 end
 
 if ns.isWOD then
+	function ns.REAGENTBANK_PURCHASED()
+		IsReagentBankUnlocked = function() return true end
+		ReagentBankFrameUnlockInfo:Hide()
+		reagentframe:SetSize(400, 300)
+		ns.UpdateReagentBankBagslots()
+	end
+
+
 	function ns.UpdateReagentBankBagslots()
 		for _,bag in pairs(reagentframe.bags) do
 			bag:Update()
