@@ -17,7 +17,7 @@ local function Update(self)
 	end
 	self.size = num_slots
 
-	if num_slots == 0 then
+	if num_slots == 0 or self.isReagentBank and not IsReagentBankUnlocked() then
 		self:SetWidth(1)
 		for i,slot in pairs(self.slots) do slot:Hide() end
 		return

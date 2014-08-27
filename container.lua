@@ -14,14 +14,32 @@ local BACKDROP = {
 }
 
 
+local function hidetextures(region, ...)
+	if region and region:IsObjectType("Texture") then region:Hide() end
+	if select("#", ...) > 0 then hidetextures(...) end
+end
+
+
 local function ResizeFrame(self)
-	local widest_column = 0
+	if self.isReagentBank and not IsReagentBankUnlocked() then
+		self:SetSize(500, 150)
 
-	for bag,frame in pairs(self.bags) do
-		widest_column = math.max(widest_column, frame:GetWidth())
+		ReagentBankFrameUnlockInfo:SetParent(self)
+		ReagentBankFrameUnlockInfo:SetAllPoints()
+		ReagentBankFrameUnlockInfo:Show()
+
+		hidetextures(ReagentBankFrameUnlockInfo:GetRegions())
+
+		MoneyFrame_Update( ReagentBankFrame.UnlockInfo.CostMoneyFrame, GetReagentBankCost())
+	else
+		local widest_column = 0
+
+		for bag,frame in pairs(self.bags) do
+			widest_column = math.max(widest_column, frame:GetWidth())
+		end
+
+		self:SetWidth(widest_column + LEFT_BORDER + RIGHT_BORDER)
 	end
-
-	self:SetWidth(widest_column + LEFT_BORDER + RIGHT_BORDER)
 end
 
 

@@ -27,13 +27,14 @@ function ns.OnLoad()
 		reagentframe:SetSize(400, 300)
 		reagentframe:SetPoint("BOTTOMRIGHT", bankframe, "TOPRIGHT")
 
+		reagentframe.isReagentBank = true
+
 		ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
 		for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
 			ns.MakeBagFrame(column_id, reagentframe, true)
 		end
 	end
 
-	-- IsReagentBankUnlocked
 
 	local money = CreateFrame("Frame", "KintamaFrameMoneyFrame", bagframe, 'SmallMoneyFrameTemplate')
 	money:SetPoint('BOTTOMRIGHT', bagframe, 'BOTTOMRIGHT', 5, 7)
@@ -64,6 +65,7 @@ function ns.OnLogin()
 	ns.RegisterEvent("BAG_UPDATE_DELAYED")
 	ns.RegisterEvent("BANKFRAME_OPENED")
 	ns.RegisterEvent("BANKFRAME_CLOSED")
+	ns.RegisterEvent("REAGENTBANK_PURCHASED")
 
 	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
@@ -111,6 +113,14 @@ function ns.BANKFRAME_CLOSED()
 		reagentframe:Hide()
 		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
 	end
+end
+
+
+function ns.REAGENTBANK_PURCHASED()
+	IsReagentBankUnlocked = function() return true end
+	ReagentBankFrameUnlockInfo:Hide()
+	reagentframe:SetSize(400, 300)
+	ns.UpdateReagentBankBagslots()
 end
 
 
