@@ -31,7 +31,7 @@ function ns.MakeSlotFrame(bag, slot)
 	local template = "ContainerFrameItemButtonTemplate"
 	if bag.isReagentBank then
 		slotid = (bag.reagentBankColumn - 1) * ns.NUM_REAGENT_SLOTS + slot
-		template = "ContainerFrameItemButtonTemplate"
+		template = "ReagentBankItemButtonGenericTemplate"
 	end
 
 	local name = string.format('%sItem%d', bag:GetName(), slotid)
