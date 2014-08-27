@@ -17,9 +17,6 @@ function ns.OnLoad()
 	reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
 	reagentframe:SetSize(400, 587)
 	reagentframe:SetPoint("TOPRIGHT", bankframe, "TOPLEFT")
-	-- reagentframe:SetPoint("BOTTOMRIGHT", bagframe, "TOPRIGHT")
-	-- reagentframe:SetAllPoints(bankframe)
-	-- reagentframe.bags = {}
 
 	ns.MakeBagFrame(BACKPACK_CONTAINER, bagframe)
 	for bag_id=1,NUM_BAG_SLOTS do ns.MakeBagFrame(bag_id, bagframe) end
