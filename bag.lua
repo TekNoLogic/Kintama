@@ -140,6 +140,20 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 		MakeSortButton(frame, BAG_CLEANUP_BANK, SortBankBags)
 	elseif bag == REAGENTBANK_CONTAINER then
 		MakeSortButton(frame, BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+	elseif reagentbank and bag == 4 then
+		local butt = CreateFrame("Button", nil, frame)
+		butt:SetSize(28, 28)
+		butt:SetPoint("LEFT")
+		butt:SetNormalTexture("Interface\\Icons\\misc_arrowright")
+		butt:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+		-- butt:SetPushedTexture("Interface\\Buttons\\UI-Quickslot-Depress")
+		butt.tooltipText = REAGENTBANK_DEPOSIT
+		butt:SetScript("OnEnter", OnEnter)
+		butt:SetScript("OnLeave", GameTooltip_Hide)
+		butt:SetScript("OnClick", function()
+			PlaySound("igMainMenuOption")
+			DepositReagentBank()
+		end)
 	elseif not reagentbank then
 		ns.MakeBagSlotFrame(bag, frame)
 	end
