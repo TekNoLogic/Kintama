@@ -101,7 +101,7 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 	frame.id = bagid
 	frame:SetID(bagid)
 
-	frame:SetHeight(39)
+	frame:SetSize(1, 39)
 	if reagentbank and bag == REAGENTBANK_CONTAINER
 	   or bag == BACKPACK_CONTAINER
 		 or bag == BANK_CONTAINER then
