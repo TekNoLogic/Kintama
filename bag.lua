@@ -43,11 +43,26 @@ local function Update(self)
 	else
 		ContainerFrame_Update(self)
 	end
+end
 
-	if self.id == 0 and BagItemAutoSortButton then
-		BagItemAutoSortButton:ClearAllPoints()
-		BagItemAutoSortButton:SetPoint("TOPLEFT", self, "TOPLEFT")
-	end
+
+local function OnEnter(self)
+	GameTooltip:SetOwner(self)
+	GameTooltip:SetText(self.tooltipText)
+	GameTooltip:Show()
+end
+local function OnClick(self)
+	PlaySound("UI_BagSorting_01")
+	self.sortFunction()
+end
+local function MakeSortButton(parent, tooltiptext, sortfunc)
+	if not ns.isWOD then return end
+	local butt = CreateFrame("Button", nil, parent, "BankAutoSortButtonTemplate")
+	butt:SetPoint("TOPLEFT")
+	butt.tooltipText = tooltiptext
+	butt.sortFunction = sortfunc
+	butt:SetScript("OnEnter", OnEnter)
+	butt:SetScript("OnClick", OnClick)
 end
 
 
@@ -119,7 +134,13 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 		end
 	})
 
-	if bag ~= BACKPACK_CONTAINER and bag ~= BANK_CONTAINER and not reagentbank then
+	if bag == BACKPACK_CONTAINER then
+		MakeSortButton(frame, BAG_CLEANUP_BAGS, SortBags)
+	elseif bag == BANK_CONTAINER then
+		MakeSortButton(frame, BAG_CLEANUP_BANK, SortBankBags)
+	elseif bag == REAGENTBANK_CONTAINER then
+		MakeSortButton(frame, BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+	elseif not reagentbank then
 		ns.MakeBagSlotFrame(bag, frame)
 	end
 

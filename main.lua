@@ -33,6 +33,9 @@ function ns.OnLoad()
 		for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
 			ns.MakeBagFrame(column_id, reagentframe, true)
 		end
+
+		BagItemAutoSortButton:Hide()
+		BagItemAutoSortButton.Show = BagItemAutoSortButton.Hide
 	end
 
 
@@ -150,7 +153,6 @@ end
 
 if ns.isWOD then
 	function ns.REAGENTBANK_PURCHASED()
-		IsReagentBankUnlocked = function() return true end
 		ReagentBankFrameUnlockInfo:Hide()
 		reagentframe:SetSize(400, 300)
 		ns.UpdateReagentBankBagslots()
