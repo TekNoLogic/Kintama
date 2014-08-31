@@ -30,8 +30,10 @@ local function ResizeFrame(self)
 
 		hidetextures(ReagentBankFrameUnlockInfo:GetRegions())
 
-		MoneyFrame_Update( ReagentBankFrame.UnlockInfo.CostMoneyFrame, GetReagentBankCost())
+		MoneyFrame_Update(ReagentBankFrame.UnlockInfo.CostMoneyFrame, GetReagentBankCost())
 	else
+		if self.isReagentBank then self:SetHeight(300) end
+
 		local widest_column = 0
 
 		for bag,frame in pairs(self.bags) do

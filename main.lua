@@ -94,16 +94,24 @@ function ns.OnLogin()
 
 	-- noop the default bank so it doesn't show
 	BankFrame:SetScript("OnEvent", function() end)
+
+	-- Special considerations to make the reagent bank work
+	reagentframe:SetScript("OnShow", function(self)
+		if IsReagentBankUnlocked() then ReagentBankFrameUnlockInfo:Hide() end
+		self:ResizeFrame()
+
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
+	end)
+	reagentframe:SetScript("OnHide", function(self)
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	end)
 end
 
 
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
-	if ns.isWOD then
-		reagentframe:Show()
-		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
-	end
+	if ns.isWOD then reagentframe:Show() end
 	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
@@ -112,10 +120,7 @@ end
 function ns.BANKFRAME_CLOSED()
 	bagframe:Hide()
 	bankframe:Hide()
-	if ns.isWOD then
-		reagentframe:Hide()
-		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-	end
+	if ns.isWOD then reagentframe:Hide() end
 end
 
 
@@ -154,8 +159,8 @@ end
 if ns.isWOD then
 	function ns.REAGENTBANK_PURCHASED()
 		ReagentBankFrameUnlockInfo:Hide()
-		reagentframe:SetSize(400, 300)
 		ns.UpdateReagentBankBagslots()
+		reagentframe:ResizeFrame()
 	end
 
 
