@@ -63,6 +63,8 @@ local function MakeSortButton(parent, tooltiptext, sortfunc)
 	butt.sortFunction = sortfunc
 	butt:SetScript("OnEnter", OnEnter)
 	butt:SetScript("OnClick", OnClick)
+
+	parent:GetParent().sortButton = butt
 end
 
 
@@ -154,6 +156,7 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 			PlaySound("igMainMenuOption")
 			DepositReagentBank()
 		end)
+		parent.depositButton = butt
 	elseif not reagentbank then
 		ns.MakeBagSlotFrame(bag, frame)
 	end
