@@ -96,22 +96,24 @@ function ns.OnLogin()
 	BankFrame:SetScript("OnEvent", function() end)
 
 	-- Special considerations to make the reagent bank work
-	reagentframe:SetScript("OnShow", function(self)
-		if IsReagentBankUnlocked() then
-			ReagentBankFrameUnlockInfo:Hide()
-			self.sortButton:Show()
-			self.depositButton:Show()
-		else
-			self.sortButton:Hide()
-			self.depositButton:Hide()
-		end
-		self:ResizeFrame()
+	if ns.isWOD then
+		reagentframe:SetScript("OnShow", function(self)
+			if IsReagentBankUnlocked() then
+				ReagentBankFrameUnlockInfo:Hide()
+				self.sortButton:Show()
+				self.depositButton:Show()
+			else
+				self.sortButton:Hide()
+				self.depositButton:Hide()
+			end
+			self:ResizeFrame()
 
-		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
-	end)
-	reagentframe:SetScript("OnHide", function(self)
-		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-	end)
+			bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
+		end)
+		reagentframe:SetScript("OnHide", function(self)
+			bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+		end)
+	end
 end
 
 
