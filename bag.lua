@@ -161,7 +161,21 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 		ns.MakeBagSlotFrame(bag, frame)
 	end
 
-	frame.FilterIcon = CreateFrame("Button", nil, frame)
+	if ns.isWOD and (frame.bagslot or bag == BACKPACK_CONTAINER) then
+		local filtericon = CreateFrame("Frame", nil, frame)
+		filtericon:SetSize(28, 28)
+		if frame.bagslot then
+			filtericon:SetPoint("CENTER", frame.bagslot, "BOTTOMRIGHT", -9, 9)
+		else
+			-- filtericon:SetPoint("CENTER", frame, "TOPleft", 28, -28)
+		end
+		frame.FilterIcon = filtericon
+
+		local icon = frame.FilterIcon:CreateTexture(nil, "OVERLAY")
+		icon:SetPoint("CENTER")
+		icon:SetAtlas("bags-icon-consumables", true)
+		filtericon.Icon = icon
+	end
 
 	ns.bags[bagindex] = frame
 	parent.bags[bagindex] = frame
