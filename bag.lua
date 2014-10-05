@@ -42,7 +42,7 @@ local function Update(self)
 		end
 	else
 		ContainerFrame_Update(self)
-		self.bagslot:SetIgnoreIcon()
+		if self.bagslot then self.bagslot:SetIgnoreIcon() end
 	end
 end
 
