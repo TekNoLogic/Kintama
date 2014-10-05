@@ -19,10 +19,52 @@ local function Update(self)
 end
 
 local filters = {
+	LE_BAG_FILTER_FLAG_IGNORE_CLEANUP,
 	LE_BAG_FILTER_FLAG_EQUIPMENT,
 	LE_BAG_FILTER_FLAG_CONSUMABLES,
 	LE_BAG_FILTER_FLAG_TRADE_GOODS,
 }
+
+local function GetBagFilter(id)
+	for _,i in ipairs(filters) do
+		if id > NUM_BAG_SLOTS then
+			if GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) then return i end
+		else
+			if GetBagSlotFlag(id, i) then return i end
+		end
+	end
+end
+
+local function SetBagFilter(id, filter, value)
+	if id > NUM_BAG_SLOTS then
+		SetBankBagSlotFlag(id - NUM_BAG_SLOTS, filter, value)
+	else
+		SetBagSlotFlag(id, filter, value)
+	end
+end
+
+local function GetBagIgnore(id)
+	if id == -1 then
+		return GetBankAutosortDisabled()
+	elseif id == 0 then
+		return GetBackpackAutosortDisabled()
+	elseif id > NUM_BAG_SLOTS then
+		return GetBankBagSlotFlag(id - NUM_BAG_SLOTS, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP)
+	else
+		return GetBagSlotFlag(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP)
+	end
+end
+
+local function SetIgnoreIcon(self)
+	local parent = self:GetParent()
+	local id = parent:GetID()
+	if GetBagIgnore(id) then
+		parent.localFlag = -1
+		parent.FilterIcon.Icon:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
+		parent.FilterIcon:Show()
+	end
+end
+
 local function OnClick(self, button)
 	if self.owned ~= false then
 		if button == "LeftButton" then
@@ -30,14 +72,7 @@ local function OnClick(self, button)
 		else
 			local parent = self:GetParent()
 			local id = parent:GetID()
-			local filter
-			for _,i in ipairs(filters) do
-				if (id > NUM_BAG_SLOTS) then
-					if GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) then filter = i end
-				else
-					if GetBagSlotFlag(id, i) then filter = i end
-				end
-			end
+			local filter = GetBagFilter(id)
 
 			local nextfilter, nextval = filters[1], true
 			if filter == filters[#filters] then
@@ -46,19 +81,20 @@ local function OnClick(self, button)
 				nextfilter, nextval = filter + 1, true
 			end
 
-			if (id > NUM_BAG_SLOTS) then
-				SetBankBagSlotFlag(id - NUM_BAG_SLOTS, nextfilter, nextval)
-			else
-				SetBagSlotFlag(id, nextfilter, nextval)
+			if nextfilter ~= LE_BAG_FILTER_FLAG_IGNORE_CLEANUP then
+				SetBagFilter(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP, false)
 			end
+			SetBagFilter(id, nextfilter, nextval)
 
-			if nextval then
+			if nextval and nextfilter == LE_BAG_FILTER_FLAG_IGNORE_CLEANUP then
+				SetIgnoreIcon(self)
+			elseif nextval then
 				parent.localFlag = nextfilter
 				parent.FilterIcon.Icon:SetAtlas(BAG_FILTER_ICONS[nextfilter])
 				parent.FilterIcon:Show()
 			else
-				parent.FilterIcon:Hide()
 				parent.localFlag = -1
+				parent.FilterIcon:Hide()
 			end
 
 		end
@@ -133,6 +169,7 @@ function ns.MakeBagSlotFrame(bag, parent)
 	frame.backgroundTextureName = texture
 
 	frame.Update = Update
+	frame.SetIgnoreIcon = SetIgnoreIcon
 
 	local border = frame:CreateTexture(nil, "OVERLAY")
 	border:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
