@@ -36,7 +36,7 @@ local function Update(self)
 	end
 
 	self:ColorSlots()
-	if self.isReagentBank or self.id == BANK_CONTAINER and ns.isWOD then
+	if self.isReagentBank or self.id == BANK_CONTAINER then
 		for _,slot in pairs(self.slots) do
 			BankFrameItemButton_Update(slot)
 		end

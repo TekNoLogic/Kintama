@@ -29,7 +29,7 @@ end
 function ns.MakeSlotFrame(bag, slot)
 	local slotid = slot
 	local template = "ContainerFrameItemButtonTemplate"
-	if bag.id == BANK_CONTAINER and ns.isWOD then
+	if bag.id == BANK_CONTAINER then
 		template = "BankItemButtonGenericTemplate"
 	elseif bag.isReagentBank then
 		slotid = (bag.reagentBankColumn - 1) * ns.NUM_REAGENT_SLOTS + slot
