@@ -8,7 +8,7 @@ local bagframe, bankframe, reagentframe
 function ns.OnLoad()
 	bagframe = ns.MakeContainerFrame("KintamaFrame", UIParent)
 	bagframe:SetSize(400, 236)
-	bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	bagframe:SetPoint("BOTTOMRIGHT", UIParent, -85, 175)
 
 	bankframe = ns.MakeContainerFrame("KintamaBankFrame", bagframe)
 	bankframe:SetSize(400, 342)
