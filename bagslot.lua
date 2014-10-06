@@ -69,7 +69,7 @@ local function OnClick(self, button)
 	if self.owned ~= false then
 		if button == "LeftButton" then
 			PutItemInBag(self.id)
-		else
+		elseif ns.isWOD then
 			local parent = self:GetParent()
 			local id = parent:GetID()
 			local filter = GetBagFilter(id)
