@@ -7,7 +7,6 @@
 ## X-Website: http://tekkub.net/
 
 externals\events.lua
-externals\wod.lua
 
 main.lua
 container.lua

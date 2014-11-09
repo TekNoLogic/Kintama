@@ -69,7 +69,7 @@ local function OnClick(self, button)
 	if self.owned ~= false then
 		if button == "LeftButton" then
 			PutItemInBag(self.id)
-		elseif ns.isWOD then
+		else
 			local parent = self:GetParent()
 			local id = parent:GetID()
 			local filter = GetBagFilter(id)
@@ -110,18 +110,14 @@ end
 
 local function OnEnterBag(self, ...)
 	BagSlotButton_OnEnter(self, ...)
-	if ns.isWOD then
-		GameTooltip:AddLine("Right click to change sort filter")
-		GameTooltip:Show()
-	end
+	GameTooltip:AddLine("Right click to change sort filter")
+	GameTooltip:Show()
 end
 
 local function OnEnterBank(self, ...)
 	BankFrameItemButton_OnEnter(self, ...)
-	if ns.isWOD then
-		GameTooltip:AddLine("Right click to change sort filter")
-		GameTooltip:Show()
-	end
+	GameTooltip:AddLine("Right click to change sort filter")
+	GameTooltip:Show()
 end
 
 
@@ -134,9 +130,7 @@ function ns.MakeBagSlotFrame(bag, parent)
 	frame:SetPoint('LEFT', parent)
 
 	frame:RegisterForDrag("LeftButton")
-	if ns.isWOD then
-		frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-	end
+	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 
 	frame:SetScript('OnLeave', OnLeave)
 	frame:SetScript('OnClick', OnClick)
@@ -151,8 +145,7 @@ function ns.MakeBagSlotFrame(bag, parent)
 		frame:SetScript('OnEnter', OnEnterBank)
 		frame:SetScript('OnEvent', BankFrameBagButton_OnEvent)
 
-		local bagid = bag
-		if ns.isWOD then bagid = bag - NUM_BAG_SLOTS end
+		local bagid = bag - NUM_BAG_SLOTS
 		frame.id = BankButtonIDToInvSlotID(bagid, 1)
 	else
 		frame.UpdateTooltip = OnEnterBag

@@ -22,21 +22,19 @@ function ns.OnLoad()
 		ns.MakeBagFrame(bag_id, bankframe)
 	end
 
-	if ns.isWOD then
-		reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
-		reagentframe:SetSize(400, 300)
-		reagentframe:SetPoint("BOTTOMRIGHT", bankframe, "TOPRIGHT")
+	reagentframe = ns.MakeContainerFrame("KintamaReagentBankFrame", bankframe)
+	reagentframe:SetSize(400, 300)
+	reagentframe:SetPoint("BOTTOMRIGHT", bankframe, "TOPRIGHT")
 
-		reagentframe.isReagentBank = true
+	reagentframe.isReagentBank = true
 
-		ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
-		for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
-			ns.MakeBagFrame(column_id, reagentframe, true)
-		end
-
-		BagItemAutoSortButton:Hide()
-		BagItemAutoSortButton.Show = BagItemAutoSortButton.Hide
+	ns.MakeBagFrame(REAGENTBANK_CONTAINER, reagentframe, true)
+	for column_id=2,(98/ns.NUM_REAGENT_SLOTS) do
+		ns.MakeBagFrame(column_id, reagentframe, true)
 	end
+
+	BagItemAutoSortButton:Hide()
+	BagItemAutoSortButton.Show = BagItemAutoSortButton.Hide
 
 
 	local money = CreateFrame("Frame", "KintamaFrameMoneyFrame", bagframe, 'SmallMoneyFrameTemplate')
@@ -71,10 +69,8 @@ function ns.OnLogin()
 
 	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
-	if ns.isWOD then
-		ns.RegisterEvent("REAGENTBANK_PURCHASED")
-		ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
-	end
+	ns.RegisterEvent("REAGENTBANK_PURCHASED")
+	ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
 
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
@@ -96,31 +92,29 @@ function ns.OnLogin()
 	BankFrame:SetScript("OnEvent", function() end)
 
 	-- Special considerations to make the reagent bank work
-	if ns.isWOD then
-		reagentframe:SetScript("OnShow", function(self)
-			if IsReagentBankUnlocked() then
-				ReagentBankFrameUnlockInfo:Hide()
-				self.sortButton:Show()
-				self.depositButton:Show()
-			else
-				self.sortButton:Hide()
-				self.depositButton:Hide()
-			end
-			self:ResizeFrame()
+	reagentframe:SetScript("OnShow", function(self)
+		if IsReagentBankUnlocked() then
+			ReagentBankFrameUnlockInfo:Hide()
+			self.sortButton:Show()
+			self.depositButton:Show()
+		else
+			self.sortButton:Hide()
+			self.depositButton:Hide()
+		end
+		self:ResizeFrame()
 
-			bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
-		end)
-		reagentframe:SetScript("OnHide", function(self)
-			bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
-		end)
-	end
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 0)
+	end)
+	reagentframe:SetScript("OnHide", function(self)
+		bagframe:SetPoint("BOTTOMRIGHT", UIParent, -50, 175)
+	end)
 end
 
 
 function ns.BANKFRAME_OPENED()
 	bagframe:Show()
 	bankframe:Show()
-	if ns.isWOD then reagentframe:Show() end
+	reagentframe:Show()
 	ns.BAG_UPDATE_DELAYED()
 	ns.UpdateBankBagslots()
 end
@@ -129,7 +123,7 @@ end
 function ns.BANKFRAME_CLOSED()
 	bagframe:Hide()
 	bankframe:Hide()
-	if ns.isWOD then reagentframe:Hide() end
+	reagentframe:Hide()
 end
 
 
@@ -165,19 +159,17 @@ function ns.UpdateBankBagslots()
 	end
 end
 
-if ns.isWOD then
-	function ns.REAGENTBANK_PURCHASED()
-		ReagentBankFrameUnlockInfo:Hide()
-		ns.UpdateReagentBankBagslots()
-		reagentframe:ResizeFrame()
-		reagentframe.sortButton:Show()
-		reagentframe.depositButton:Show()
-	end
+function ns.REAGENTBANK_PURCHASED()
+	ReagentBankFrameUnlockInfo:Hide()
+	ns.UpdateReagentBankBagslots()
+	reagentframe:ResizeFrame()
+	reagentframe.sortButton:Show()
+	reagentframe.depositButton:Show()
+end
 
 
-	function ns.UpdateReagentBankBagslots()
-		for _,bag in pairs(reagentframe.bags) do
-			bag:Update()
-		end
+function ns.UpdateReagentBankBagslots()
+	for _,bag in pairs(reagentframe.bags) do
+		bag:Update()
 	end
 end

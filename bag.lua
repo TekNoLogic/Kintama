@@ -42,7 +42,7 @@ local function Update(self)
 		end
 	else
 		ContainerFrame_Update(self)
-		if ns.isWOD and self.bagslot then self.bagslot:SetIgnoreIcon() end
+		if self.bagslot then self.bagslot:SetIgnoreIcon() end
 	end
 end
 
@@ -57,7 +57,6 @@ local function OnClick(self)
 	self.sortFunction()
 end
 local function MakeSortButton(parent, tooltiptext, sortfunc)
-	if not ns.isWOD then return end
 	local butt = CreateFrame("Button", nil, parent, "BankAutoSortButtonTemplate")
 	butt:SetPoint("TOPLEFT")
 	butt.tooltipText = tooltiptext
@@ -162,7 +161,7 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 		ns.MakeBagSlotFrame(bag, frame)
 	end
 
-	if ns.isWOD and (frame.bagslot or bag == BACKPACK_CONTAINER) then
+	if frame.bagslot or bag == BACKPACK_CONTAINER then
 		local filtericon = CreateFrame("Frame", nil, frame)
 		filtericon:SetSize(28, 28)
 		if frame.bagslot then
