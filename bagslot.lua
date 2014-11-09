@@ -55,10 +55,10 @@ local function GetBagIgnore(id)
 	end
 end
 
-local function SetIgnoreIcon(self)
+local function SetIgnoreIcon(self, force)
 	local parent = self:GetParent()
 	local id = parent:GetID()
-	if GetBagIgnore(id) then
+	if force or GetBagIgnore(id) then
 		parent.localFlag = -1
 		parent.FilterIcon.Icon:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
 		parent.FilterIcon:Show()
@@ -87,7 +87,7 @@ local function OnClick(self, button)
 			SetBagFilter(id, nextfilter, nextval)
 
 			if nextval and nextfilter == LE_BAG_FILTER_FLAG_IGNORE_CLEANUP then
-				SetIgnoreIcon(self)
+				SetIgnoreIcon(self, true)
 			elseif nextval then
 				parent.localFlag = nextfilter
 				parent.FilterIcon.Icon:SetAtlas(BAG_FILTER_ICONS[nextfilter])
