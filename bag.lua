@@ -169,6 +169,7 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 		else
 			-- filtericon:SetPoint("CENTER", frame, "TOPleft", 28, -28)
 		end
+		filtericon:Hide()
 		frame.FilterIcon = filtericon
 
 		local icon = frame.FilterIcon:CreateTexture(nil, "OVERLAY")
