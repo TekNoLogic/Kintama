@@ -26,6 +26,14 @@ local function ColorBorder(self)
 end
 
 
+local function HighlightBoE(self)
+	local bag_frame = self:GetParent()
+	if ns.IsBindOnEquip(bag_frame.id, self.id) then
+		self.JunkIcon:Show()
+	end
+end
+
+
 function ns.MakeSlotFrame(bag, slot)
 	local slotid = slot
 	local template = "ContainerFrameItemButtonTemplate"
@@ -59,6 +67,7 @@ function ns.MakeSlotFrame(bag, slot)
 
 	frame.border = border
 	frame.ColorBorder = ColorBorder
+	frame.HighlightBoE = HighlightBoE
 
 	return frame
 end

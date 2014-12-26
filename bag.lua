@@ -5,8 +5,11 @@ local myname, ns = ...
 ns.bags = {}
 
 
-local function ColorSlots(self)
-	for i,slot in pairs(self.slots) do slot:ColorBorder() end
+local function UpdateSlots(self)
+	for i,slot in pairs(self.slots) do
+		slot:ColorBorder()
+		slot:HighlightBoE()
+	end
 end
 
 
@@ -35,7 +38,6 @@ local function Update(self)
 		end
 	end
 
-	self:ColorSlots()
 	if self.isReagentBank or self.id == BANK_CONTAINER then
 		for _,slot in pairs(self.slots) do
 			BankFrameItemButton_Update(slot)
@@ -44,6 +46,8 @@ local function Update(self)
 		ContainerFrame_Update(self)
 		if self.bagslot then self.bagslot:SetIgnoreIcon() end
 	end
+	
+	self:UpdateSlots()
 end
 
 
@@ -126,7 +130,7 @@ function ns.MakeBagFrame(bag, parent, reagentbank)
 	frame:SetScript('OnSizeChanged', function() parent:ResizeFrame() end)
 
 	frame.Update = Update
-	frame.ColorSlots = ColorSlots
+	frame.UpdateSlots = UpdateSlots
 
 	frame.slots = setmetatable({}, {
 		__index = function(t,i)
