@@ -7,9 +7,11 @@
 ## X-Website: http://tekkub.net/
 
 externals\events.lua
+externals\gsc.lua
 externals\tooltip_scanner.lua
 externals\bound.lua
 
+currency.lua
 main.lua
 container.lua
 bagslot.lua

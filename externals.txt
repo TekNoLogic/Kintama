@@ -1,3 +1,4 @@
 bound.lua
 events.lua
+gsc.lua
 tooltip_scanner.lua

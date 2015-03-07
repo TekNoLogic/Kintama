@@ -36,10 +36,7 @@ function ns.OnLoad()
 	BagItemAutoSortButton:Hide()
 	BagItemAutoSortButton.Show = BagItemAutoSortButton.Hide
 
-
-	local money = CreateFrame("Frame", "KintamaFrameMoneyFrame", bagframe, 'SmallMoneyFrameTemplate')
-	money:SetPoint('BOTTOMRIGHT', bagframe, 'BOTTOMRIGHT', 5, 7)
-	SmallMoneyFrame_OnLoad(money, 'PLAYER')
+	ns.MakeCurrencyFrame(bagframe)
 
 	BagItemSearchBox:Hide()
 	BagItemSearchBox.Show = BagItemSearchBox.Hide
@@ -47,6 +44,7 @@ function ns.OnLoad()
 	ns.MakeContainerFrame = nil
 	ns.MakeBagFrame = nil
 	ns.MakeBagSlotFrame = nil
+	ns.MakeCurrencyFrame = nil
 end
 
 
@@ -67,10 +65,14 @@ function ns.OnLogin()
 	ns.RegisterEvent("BANKFRAME_OPENED")
 	ns.RegisterEvent("BANKFRAME_CLOSED")
 
-	ns.RegisterEvent("PLAYER_MONEY", ns.UpdateBankBagslots)
 	ns.RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", ns.UpdateBankBagslots)
 	ns.RegisterEvent("REAGENTBANK_PURCHASED")
 	ns.RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", ns.UpdateReagentBankBagslots)
+
+	ns.RegisterEvent("PLAYER_MONEY")
+	ns.RegisterEvent("PLAYER_TRADE_MONEY", ns.UpdateGold)
+	ns.RegisterEvent("SEND_MAIL_MONEY_CHANGED", ns.UpdateGold)
+	ns.RegisterEvent("SEND_MAIL_COD_CHANGED", ns.UpdateGold)
 
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
