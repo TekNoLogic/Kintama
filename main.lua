@@ -74,6 +74,8 @@ function ns.OnLogin()
 	ns.RegisterEvent("SEND_MAIL_MONEY_CHANGED", ns.UpdateGold)
 	ns.RegisterEvent("SEND_MAIL_COD_CHANGED", ns.UpdateGold)
 
+	ns.RegisterEvent("CURRENCY_DISPLAY_UPDATE", ns.UpdateCurrency)
+
 	ns.RegisterEvent("AUCTION_HOUSE_SHOW", open)
 	ns.RegisterEvent("AUCTION_HOUSE_CLOSED", close)
 	ns.RegisterEvent("MAIL_SHOW", open)
