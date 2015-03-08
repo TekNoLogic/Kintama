@@ -90,6 +90,11 @@ function ns.OnLogin()
 	bagframe:Hide()
 	bankframe:Hide()
 
+	bagframe:SetScript("OnShow", function()
+		ns.UpdateGold()
+		ns.UpdateCurrency()
+	end)
+	
 	bankframe:SetScript("OnHide", CloseBankFrame)
 
 	-- noop the default bank so it doesn't show

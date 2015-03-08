@@ -75,7 +75,6 @@ end
 local function OnHide(self) self:UnregisterAllEvents() end
 local function OnShow(self)
 	self:Update()
-	if self.id == 0 then ns.UpdateCurrency() end
 	self:RegisterEvent('BAG_UPDATE')
 	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
 	self:RegisterEvent('UPDATE_INVENTORY_ALERTS')
