@@ -33,7 +33,7 @@ function ns.UpdateCurrency()
 		local frame = currencies[i]
 		local name, count, icon = GetBackpackCurrencyInfo(i)
 		if name then
-			frame:SetText(count.. "|T".. icon.. ":12|t")
+			frame:SetText(count.. "|T".. icon.. ":12:12:0:0:64:64:4:60:4:60|t")
 			frame:Show()
 		else
 			frame:Hide()
