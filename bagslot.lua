@@ -65,6 +65,14 @@ local function SetIgnoreIcon(self, force)
 	end
 end
 
+local function OnReceiveDrag(self)
+	if self:GetID() > NUM_BAG_SLOTS then
+		BankFrameItemButtonBag_OnClick(self, nil)
+	else
+		ContainerFrameItemButton_OnDrag(self)
+	end
+end
+
 local function OnClick(self, button)
 	if self.owned ~= false then
 		if button == "LeftButton" then
@@ -135,7 +143,7 @@ function ns.MakeBagSlotFrame(bag, parent)
 	frame:SetScript('OnLeave', OnLeave)
 	frame:SetScript('OnClick', OnClick)
 	frame:SetScript('OnDragStart', BagSlotButton_OnDrag)
-	frame:SetScript('OnReceiveDrag', OnClick)
+	frame:SetScript('OnReceiveDrag', OnReceiveDrag)
 	frame:SetScript('OnShow', PaperDollItemSlotButton_OnShow)
 	frame:SetScript('OnHide', PaperDollItemSlotButton_OnHide)
 
