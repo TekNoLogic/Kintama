@@ -2,16 +2,10 @@
 local myname, ns = ...
 
 
--- Why isn't there an API for this?
 local slotids = {
--- INVSLOT_FINGER1		= 11;
--- INVSLOT_FINGER2		= 12;
--- INVSLOT_TRINKET1	= 13;
--- INVSLOT_TRINKET2	= 14;
 -- INVSLOT_MAINHAND	= 16;
 -- INVSLOT_OFFHAND		= 17;
 -- INVSLOT_RANGED		= 18;
--- INVSLOT_TABARD		= 19;
 
 	INVTYPE_HEAD = INVSLOT_HEAD,
 	INVTYPE_NECK = INVSLOT_NECK,
@@ -23,6 +17,8 @@ local slotids = {
 	INVTYPE_FEET = INVSLOT_FEET,
 	INVTYPE_WRIST = INVSLOT_WRIST,
 	INVTYPE_HAND = INVSLOT_HAND,
+	INVTYPE_FINGER = {INVSLOT_FINGER1, INVSLOT_FINGER2},
+	INVTYPE_TRINKET = {INVSLOT_TRINKET1,	INVSLOT_TRINKET2},
 	-- INVTYPE_WEAPON = BLAH,
 	-- INVTYPE_SHIELD = BLAH,
 	-- INVTYPE_RANGED = BLAH,
@@ -33,8 +29,6 @@ local slotids = {
 	-- INVTYPE_HOLDABLE = BLAH,
 	-- INVTYPE_THROWN = BLAH,
 	-- INVTYPE_RANGEDRIGHT = BLAH,
-	-- INVTYPE_FINGER = BLAH,
-	-- INVTYPE_TRINKET = BLAH,
 }
 
 
@@ -42,8 +36,17 @@ local function GetItemLevel(slottoken)
 	local slotid = slotids[slottoken]
 	if not slotid then return end
 
-	local link = GetInventoryItemLink("player", slotid)
-	return link and ns.ilvls[link]
+	if type(slotid) == "table" then
+		local link1 = GetInventoryItemLink("player", slotid[1])
+		local link2 = GetInventoryItemLink("player", slotid[2])
+		local lvl1 = link1 and ns.ilvls[link1]
+		local lvl2 = link2 and ns.ilvls[link2]
+		if not lvl1 or not lvl2 then return end
+		return math.max(lvl1, lvl2)
+	else
+		local link = GetInventoryItemLink("player", slotid)
+		return link and ns.ilvls[link]
+	end
 end
 
 
