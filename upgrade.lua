@@ -28,6 +28,20 @@ local slotids = {
 -- INVSLOT_MAINHAND	= 16;
 -- INVSLOT_OFFHAND		= 17;
 -- INVSLOT_RANGED		= 18;
+local function GetSlotItemlevel(slotid)
+	local link = GetInventoryItemLink("player", slotid)
+	return link and ns.ilvls[link]
+end
+
+
+local function GetLowestItemlevel(slotid1, slotid2)
+	local lvl1 = GetSlotItemlevel(slotid1)
+	local lvl2 = GetSlotItemlevel(slotid2)
+	if not lvl1 or not lvl2 then return end
+	return math.min(lvl1, lvl2)
+end
+
+
 
 
 local function GetItemLevel(slottoken)
@@ -35,15 +49,9 @@ local function GetItemLevel(slottoken)
 	if not slotid then return end
 
 	if type(slotid) == "table" then
-		local link1 = GetInventoryItemLink("player", slotid[1])
-		local link2 = GetInventoryItemLink("player", slotid[2])
-		local lvl1 = link1 and ns.ilvls[link1]
-		local lvl2 = link2 and ns.ilvls[link2]
-		if not lvl1 or not lvl2 then return end
-		return math.max(lvl1, lvl2)
+		return GetLowestItemlevel(slotid[1], slotid[2])
 	else
-		local link = GetInventoryItemLink("player", slotid)
-		return link and ns.ilvls[link]
+		return GetSlotItemlevel(slotid)
 	end
 end
 
