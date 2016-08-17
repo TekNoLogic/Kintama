@@ -8,8 +8,10 @@
 
 externals\events.lua
 externals\gsc.lua
+externals\item_colors.lua
 externals\tooltip_scanner.lua
 externals\bound.lua
+externals\ilvl.lua
 
 currency.lua
 main.lua
@@ -17,3 +19,4 @@ container.lua
 bagslot.lua
 bag.lua
 slot.lua
+upgrade.lua

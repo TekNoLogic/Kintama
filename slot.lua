@@ -2,7 +2,6 @@
 local myname, ns = ...
 
 
-local colorCache = {}
 local plain = {r = .05, g = .05, b = .05}
 local function ColorBorder(self)
 	local bag_frame = self:GetParent()
@@ -11,13 +10,8 @@ local function ColorBorder(self)
 	local link = GetContainerItemLink(bag_frame.id, self.id)
 	if link then
 		local _, _, rarity = GetItemInfo(link)
-		if rarity and rarity > 1 then
-			color = colorCache[rarity]
-			if not color then
-				local r, g, b, hex = GetItemQualityColor(rarity)
-				color = {r = r, g = g, b = b}
-				colorCache[rarity] = color
-			end
+		if rarity ~= 1 then
+			color = ns.item_colors[rarity] or plain
 		end
 	end
 
@@ -30,6 +24,18 @@ local function HighlightBoE(self)
 	local bag_frame = self:GetParent()
 	if ns.IsBindOnEquip(bag_frame.id, self.id) then
 		self.JunkIcon:Show()
+	end
+end
+
+
+local function HighlightUpgrade(self)
+	local bag_frame = self:GetParent()
+	local upgrade = ns.IsUpgrade(bag_frame.id, self.id)
+	if upgrade then
+		self.UpgradeIcon:Show()
+		self.UpgradeIcon:SetDesaturated(upgrade == 0)
+	else
+		self.UpgradeIcon:Hide()
 	end
 end
 
@@ -68,6 +74,15 @@ function ns.MakeSlotFrame(bag, slot)
 	frame.border = border
 	frame.ColorBorder = ColorBorder
 	frame.HighlightBoE = HighlightBoE
+
+	local upgrade = frame:CreateTexture(nil, "OVERLAY")
+	upgrade:SetAtlas("Garr_LevelUpgradeArrow", true)
+	upgrade:SetPoint("TOPLEFT", -8, 8)
+	upgrade:Hide()
+
+	frame.UpgradeIcon = upgrade
+	frame.IsUpgrade = IsUpgrade
+	frame.HighlightUpgrade = HighlightUpgrade
 
 	return frame
 end

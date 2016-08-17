@@ -1,4 +1,6 @@
 bound.lua
 events.lua
 gsc.lua
+ilvl.lua
+item_colors.lua
 tooltip_scanner.lua
