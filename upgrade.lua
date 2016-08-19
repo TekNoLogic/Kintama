@@ -188,6 +188,10 @@ local function GetItemLevel(slottoken)
 end
 
 
+local excludedslots = {
+	INVTYPE_ROBE = true,
+	INVTYPE_TABARD = true,
+}
 function ns.IsUpgrade(bag, slot)
 	if ns.IsBindOnEquip(bag, slot) then return false end
 
@@ -196,7 +200,7 @@ function ns.IsUpgrade(bag, slot)
 		local ilvl = ns.ilvls[link]
 		local _, _, _, _, _, _, _, _, equipSlot = GetItemInfo(link)
 		local equipped = GetItemLevel(equipSlot)
-		if not ilvl or equipSlot == "INVTYPE_TABARD" then return end
+		if not ilvl or excludedslots[equipSlot] then return end
 		if not equipped then return true end
 
 		if ilvl == equipped then
