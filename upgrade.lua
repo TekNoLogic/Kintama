@@ -31,7 +31,7 @@ local weapon_slotids = {
 }
 local mainhand_types = {
 	INVTYPE_WEAPONMAINHAND = true,
-	INVTYPE_RANGED = true,
+	-- INVTYPE_RANGED = true, -- Hunter weapons are effectively 2H
 	INVTYPE_RANGEDRIGHT = true,
 }
 local offhand_types = {
@@ -39,28 +39,68 @@ local offhand_types = {
 	INVTYPE_HOLDABLE = true,
 	INVTYPE_SHIELD = true,
 }
+local dual1Hspecs = {
+	[72]  = true, -- Fury warriors
+	[263] = true, -- Enhancement shaman
+	[268] = true, -- Brewmaster monk
+	[269] = true, -- Windwalker monk
+}
 
+
+local function GetCurrentSpecID()
+	local specIndex = GetSpecialization()
+	if not specIndex then return end
+	return GetSpecializationInfo(specIndex)
+end
+
+
+local function GetEquippedInvType(slotid)
+	local link = GetInventoryItemLink("player", slotid)
+	if not link then return end
+	local _, _, _, _, _, _, _, _, equipSlot = GetItemInfo(link)
+	return equipSlot
+end
+
+
+local _, myclass = UnitClass("player")
 local function IsDualWield1H()
-	-- Fury warriors
-	-- Enhancement shaman
-	-- Brewmaster monk
-	-- Windwalker monk
-	-- All DKs
-	-- All rogues (cannot use 2H)
-	-- All DHs (cannot use 2H)
+	-- Rogue and Rogue 2.0 can **only** dual-wield 1H weapons
+	if myclass == "ROGUE" then return true end
+	if myclass == "DEMONHUNTER" then return true end
+
+	-- Check for current class/spec that in dual-wield capable
+	local specID = GetCurrentSpecID()
+	if not (myclass == "DEATHKNIGHT" or specid and dual1Hspecs[specid]) then
+		return false
+	end
+
+	-- Look at equipment to see if we are currently in dual mode
+	local slot = GetEquippedInvType(INVSLOT_MAINHAND)
+	if not (slot == "INVTYPE_WEAPON" or slot == "INVTYPE_WEAPONMAINHAND") then
+		-- We don't have a 1H weapon in mainhand
+		return false
+	end
+
+	local slot = GetEquippedInvType(INVSLOT_OFFHAND)
+	if not (slot == "INVTYPE_WEAPON" or slot == "INVTYPE_WEAPONOFFHAND") then
+		-- We don't have a 1H weapon in offhand
+		return false
+	end
+
+	return true
 end
 
 
 local function IsDualWield2H()
-	-- Arms warriors
+	-- Arms warriors only
+	return GetCurrentSpecID() == 71
 end
 
 
 local function IsMonoWield1H()
 	-- Check what is equipped
-	local link = GetInventoryItemLink("player", INVSLOT_MAINHAND)
-	local _, _, _, _, _, _, _, _, equipSlot = GetItemInfo(link)
-	return not not (mainhand_types[equipSlot] or equipSlot == "INVTYPE_WEAPON")
+	local slot = GetEquippedInvType(INVSLOT_MAINHAND)
+	return not not (mainhand_types[slot] or slot == "INVTYPE_WEAPON")
 end
 
 
@@ -89,7 +129,15 @@ end
 local function GetWeaponItemLevel(slottoken)
 	if not weapon_slotids[slottoken] then return end
 
-	if IsDualWield1H() then
+	if IsDualWield2H() then
+		if slottoken == "INVTYPE_2HWEAPON" then
+			-- If item is 2H, return lowest ilvl
+			return GetLowestItemlevel(INVSLOT_MAINHAND, INVSLOT_OFFHAND)
+		end
+
+		-- Ignore all other items (why would they spec 2H-dual and not use it?)
+
+	elseif IsDualWield1H() then
 		if mainhand_types[slottoken] then
 			-- If item is specific-hand, return that slot's ilvl
 			return GetSlotItemlevel(INVSLOT_MAINHAND)
@@ -106,14 +154,6 @@ local function GetWeaponItemLevel(slottoken)
 			-- If item is 2H, return average ilvl
 			return GetAverageItemlevel(INVSLOT_MAINHAND, INVSLOT_OFFHAND)
 		end
-
-	elseif IsDualWield2H() then
-		if slottoken == "INVTYPE_2HWEAPON" then
-			-- If item is 2H, return lowest ilvl
-			return GetLowestItemlevel(INVSLOT_MAINHAND, INVSLOT_OFFHAND)
-		end
-
-		-- Ignore all other items (why would they spec 2H-dual and not use it?)
 
 	elseif IsMonoWield1H() then
 		if mainhand_types[slottoken] or slottoken == "INVTYPE_WEAPON" then
