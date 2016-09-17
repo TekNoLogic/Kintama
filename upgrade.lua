@@ -189,6 +189,7 @@ end
 
 
 local excludedslots = {
+	INVTYPE_BODY = true,
 	INVTYPE_ROBE = true,
 	INVTYPE_TABARD = true,
 }
