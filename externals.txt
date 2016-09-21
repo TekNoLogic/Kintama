@@ -4,3 +4,4 @@ gsc.lua
 ilvl.lua
 item_colors.lua
 tooltip_scanner.lua
+is_7_1.lua

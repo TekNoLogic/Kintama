@@ -12,6 +12,7 @@ externals\item_colors.lua
 externals\tooltip_scanner.lua
 externals\bound.lua
 externals\ilvl.lua
+externals\is_7_1.lua
 
 currency.lua
 main.lua

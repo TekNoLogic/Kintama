@@ -2,6 +2,9 @@
 local myname, ns = ...
 
 
+if ns.is_7_1 then return end
+
+
 local slotids = {
 	INVTYPE_HEAD = INVSLOT_HEAD,
 	INVTYPE_NECK = INVSLOT_NECK,

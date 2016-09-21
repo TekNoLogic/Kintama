@@ -75,14 +75,16 @@ function ns.MakeSlotFrame(bag, slot)
 	frame.ColorBorder = ColorBorder
 	frame.HighlightBoE = HighlightBoE
 
-	local upgrade = frame:CreateTexture(nil, "OVERLAY")
-	upgrade:SetAtlas("Garr_LevelUpgradeArrow", true)
-	upgrade:SetPoint("TOPLEFT", -8, 8)
-	upgrade:Hide()
+	if not ns.is_7_1 then
+		local upgrade = frame:CreateTexture(nil, "OVERLAY")
+		upgrade:SetAtlas("bags-greenarrow", true)
+		upgrade:SetPoint("TOPLEFT", -8, 8)
+		upgrade:Hide()
 
-	frame.UpgradeIcon = upgrade
-	frame.IsUpgrade = IsUpgrade
-	frame.HighlightUpgrade = HighlightUpgrade
+		frame.UpgradeIcon = upgrade
+		frame.HighlightUpgrade = HighlightUpgrade
+	end
+
 
 	return frame
 end
