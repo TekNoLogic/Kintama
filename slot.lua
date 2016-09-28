@@ -77,7 +77,7 @@ function ns.MakeSlotFrame(bag, slot)
 
 	if not ns.is_7_1 then
 		local upgrade = frame:CreateTexture(nil, "OVERLAY")
-		upgrade:SetAtlas("bags-greenarrow", true)
+		upgrade:SetAtlas("Garr_LevelUpgradeArrow", true)
 		upgrade:SetPoint("TOPLEFT", -8, 8)
 		upgrade:Hide()
 
