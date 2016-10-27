@@ -31,12 +31,7 @@ end
 local function HighlightUpgrade(self)
 	local bag_frame = self:GetParent()
 	local upgrade = ns.IsUpgrade(bag_frame.id, self.id)
-	if upgrade then
-		self.UpgradeIcon:Show()
-		self.UpgradeIcon:SetDesaturated(upgrade == 0)
-	else
-		self.UpgradeIcon:Hide()
-	end
+	self.UpgradeIcon:SetShown(upgrade)
 end
 
 

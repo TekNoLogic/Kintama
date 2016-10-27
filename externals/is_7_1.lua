@@ -43,3 +43,4 @@ end
 
 
 ns.is_7_1 = ns.IsGameVersion("7.1")
+ns.is_7_1 = false
