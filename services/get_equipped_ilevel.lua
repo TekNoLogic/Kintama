@@ -2,11 +2,6 @@
 local myname, ns = ...
 
 
-local EXCLUDED_SLOTS = {
-	INVTYPE_BODY = true,
-	INVTYPE_ROBE = true,
-	INVTYPE_TABARD = true,
-}
 local SLOT_IDS = {
 	INVTYPE_HEAD = INVSLOT_HEAD,
 	INVTYPE_NECK = INVSLOT_NECK,
@@ -38,8 +33,6 @@ end
 
 
 function ns.GetEquippedItemLevel(slot_token)
-	if EXCLUDED_SLOTS[slot_token] then return nil, true end
-
 	local slot_id = SLOT_IDS[slot_token]
 	if not slot_id then return nil, true end
 
