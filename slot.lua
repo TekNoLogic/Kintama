@@ -72,13 +72,18 @@ function ns.MakeSlotFrame(bag, slot)
 
 	if not ns.is_7_1 then
 		local upgrade = frame:CreateTexture(nil, "OVERLAY")
-		upgrade:SetAtlas("Garr_LevelUpgradeArrow", true)
-		upgrade:SetPoint("TOPLEFT", -8, 8)
+		upgrade:SetAtlas("bags-greenarrow", true)
+		upgrade:SetPoint("TOPLEFT")
 		upgrade:Hide()
 
 		frame.UpgradeIcon = upgrade
 		frame.HighlightUpgrade = HighlightUpgrade
 	end
+
+	local downgrade = ns.CreateDowngradeIcon(frame)
+	downgrade:SetPoint("TOPLEFT")
+
+	frame.DowngradeIcon = downgrade
 
 
 	return frame

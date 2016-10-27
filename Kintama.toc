@@ -14,10 +14,15 @@ externals\bound.lua
 externals\ilvl.lua
 externals\is_7_1.lua
 
+frames\downgrade.lua
+
+services\get_equipped_ilevel.lua
+services\is_downgrade.lua
+services\is_upgrade.lua
+
 currency.lua
 main.lua
 container.lua
 bagslot.lua
 bag.lua
 slot.lua
-upgrade.lua

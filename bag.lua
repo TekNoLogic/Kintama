@@ -9,6 +9,7 @@ local function UpdateSlots(self)
 	for i,slot in pairs(self.slots) do
 		slot:ColorBorder()
 		slot:HighlightBoE()
+		slot.DowngradeIcon:SetValue(self.id, slot.id)
 		if not ns.is_7_1 then slot:HighlightUpgrade() end
 	end
 end
