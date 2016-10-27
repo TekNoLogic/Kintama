@@ -16,7 +16,7 @@ externals\ilvl.lua
 frames\downgrade.lua
 frames\upgrade.lua
 
-services\get_item_level_for_compare.lua
+services\get_item_levels_for_compare.lua
 services\is_downgrade.lua
 services\is_upgrade.lua
 

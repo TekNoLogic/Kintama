@@ -80,12 +80,12 @@ function ns.MakeSlotFrame(bag, slot)
 	frame.HighlightBoE = HighlightBoE
 
 
-	local upgrade = ns.CreateUpgradeIcon(frame, bag, slot)
+	local upgrade = ns.CreateUpgradeIcon(frame, bag.id, slot)
 	upgrade:SetPoint("TOPLEFT")
 	kids[upgrade] = true
 
 
-	local downgrade = ns.CreateDowngradeIcon(frame, bag, slot)
+	local downgrade = ns.CreateDowngradeIcon(frame, bag.id, slot)
 	downgrade:SetPoint("TOPLEFT")
 	kids[downgrade] = true
 
