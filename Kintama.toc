@@ -12,11 +12,11 @@ externals\item_colors.lua
 externals\tooltip_scanner.lua
 externals\bound.lua
 externals\ilvl.lua
-externals\is_7_1.lua
 
 frames\downgrade.lua
+frames\upgrade.lua
 
-services\get_equipped_ilevel.lua
+services\get_item_level_for_compare.lua
 services\is_downgrade.lua
 services\is_upgrade.lua
 

@@ -35,7 +35,16 @@ local function HighlightUpgrade(self)
 end
 
 
+local children = {}
+function Update(self)
+	ColorBorder(self)
+	HighlightBoE(self)
+	for frame in pairs (children[self]) do frame:Update() end
+end
+
+
 function ns.MakeSlotFrame(bag, slot)
+	local kids = {}
 	local slotid = slot
 	local template = "ContainerFrameItemButtonTemplate"
 	if bag.id == BANK_CONTAINER then
@@ -70,21 +79,19 @@ function ns.MakeSlotFrame(bag, slot)
 	frame.ColorBorder = ColorBorder
 	frame.HighlightBoE = HighlightBoE
 
-	if not ns.is_7_1 then
-		local upgrade = frame:CreateTexture(nil, "OVERLAY")
-		upgrade:SetAtlas("bags-greenarrow", true)
-		upgrade:SetPoint("TOPLEFT")
-		upgrade:Hide()
 
-		frame.UpgradeIcon = upgrade
-		frame.HighlightUpgrade = HighlightUpgrade
-	end
+	local upgrade = ns.CreateUpgradeIcon(frame, bag, slot)
+	upgrade:SetPoint("TOPLEFT")
+	kids[upgrade] = true
 
-	local downgrade = ns.CreateDowngradeIcon(frame)
+
+	local downgrade = ns.CreateDowngradeIcon(frame, bag, slot)
 	downgrade:SetPoint("TOPLEFT")
+	kids[downgrade] = true
 
-	frame.DowngradeIcon = downgrade
 
+	frame.Update = Update
+	children[frame] = kids
 
 	return frame
 end

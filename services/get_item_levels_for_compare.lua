@@ -32,7 +32,11 @@ local function GetLowestItemlevel(slot_id_1, slot_id_2)
 end
 
 
-function ns.GetEquippedItemLevel(slot_token)
+local function GetEquippedItemLevel(bag, slot)
+	local link = GetContainerItemLink(bag, slot)
+	if not link then return end
+
+	local _, _, _, _, _, _, _, _, slot_token = GetItemInfo(link)
 	local slot_id = SLOT_IDS[slot_token]
 	if not slot_id then return nil, true end
 
@@ -41,4 +45,24 @@ function ns.GetEquippedItemLevel(slot_token)
 	else
 		return GetSlotItemlevel(slot_id)
 	end
+end
+
+
+local function GetBagItemLevel(bag, slot)
+	if ns.IsBindOnEquip(bag, slot) then return end
+
+	local link = GetContainerItemLink(bag, slot)
+	if not link then return end
+	if not IsEquippableItem(link) then return end
+
+	return ns.ilvls[link]
+end
+
+
+function ns.GetItemLevelsForCompare(bag, slot)
+	local ilvl = GetBagItemLevel(bag, slot)
+	if not ilvl then return end
+
+	local equipped_ilvl, excluded = GetEquippedItemLevel(bag, slot)
+	return ilvl, equipped_ilvl, excluded
 end
