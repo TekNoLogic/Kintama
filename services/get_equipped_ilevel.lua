@@ -41,7 +41,7 @@ function ns.GetEquippedItemLevel(slot_token)
 	if EXCLUDED_SLOTS[slot_token] then return nil, true end
 
 	local slot_id = SLOT_IDS[slot_token]
-	if not slot_id then return end
+	if not slot_id then return nil, true end
 
 	if type(slot_id) == "table" then
 		return GetLowestItemlevel(slot_id[1], slot_id[2])
