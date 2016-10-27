@@ -28,13 +28,6 @@ local function HighlightBoE(self)
 end
 
 
-local function HighlightUpgrade(self)
-	local bag_frame = self:GetParent()
-	local upgrade = ns.IsUpgrade(bag_frame.id, self.id)
-	self.UpgradeIcon:SetShown(upgrade)
-end
-
-
 local children = {}
 function Update(self)
 	ColorBorder(self)
